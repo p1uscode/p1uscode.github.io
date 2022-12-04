@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Wellnote保存 Bookmarklet</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P9Q5MX4F86"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P9Q5MX4F86');
+</script>
+</head>
+<body>
+<div class="container">
+<h1>Wellnote保存 Bookmarklet</h1>
+
+<h2>概要</h2>
+<ol>
+  <li>
+    WellnoteのPC版のホーム画面相当のデータ(画像、動画、コメント、スタンプ、いいね)を保存します。※動画は現在未対応
+  </li>
+  <li>
+    動作させるPCとWellnoteのサイト等の通信になります(当サイトがデータを中継することはありません)
+  </li>
+</ol>
+
+<h2>手順</h2>
+<ol>
+  <li>
+    <a class="btn btn-success" href="javascript:const%20saveBtn%3Ddocument.createElement('button')%3BsaveBtn.innerHTML%3D'%E4%BF%9D%E5%AD%98'%3BsaveBtn.style.position%3D'fixed'%3BsaveBtn.style.top%3D'2px'%3BsaveBtn.style.left%3D'2px'%3BsaveBtn.style.padding%3D'8px'%3BsaveBtn.style.zIndex%3D'9999'%3Bdocument.body.parentNode.insertBefore(saveBtn%2Cdocument.body.parentNode.firstElementChild)%3Blet%20intervalId%3Bconst%20data%3D%7B%7D%3BsaveBtn.onclick%3D()%3D%3E%7Bif(window.location.href%20!%3D%3D'https%3A%2F%2Fwellnote.jp%2F')%7Balert('Wellnote%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%88%E3%81%AB%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%97%E3%81%A6%E3%80%81%E3%83%9B%E3%83%BC%E3%83%A0%E7%94%BB%E9%9D%A2%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82')%3Breturn%3B%7Dif(!intervalId)%7Bconst%20delay%3Dprompt('%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB%E3%82%B9%E3%83%94%E3%83%BC%E3%83%89%E3%80%82%5Cn%E2%80%BB%E6%95%B0%E5%AD%97%E3%82%92%E5%A4%A7%E3%81%8D%E3%81%8F%E3%81%99%E3%82%8B%E3%81%A8%E9%81%85%E3%81%8F%E3%81%AA%E3%82%8A%E3%81%BE%E3%81%99%E3%80%82%5Cn%E2%80%BB%E9%80%94%E4%B8%AD%E3%81%A7%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%8C%E6%AD%A2%E3%81%BE%E3%81%A3%E3%81%9F%E3%82%89%E3%80%81%E7%94%BB%E9%9D%A2%E4%B8%AD%E5%A4%AE%E3%82%92%E4%B8%80%E5%BA%A6%E3%82%AF%E3%83%AA%E3%83%83%E3%82%AF%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82%5Cn%E2%80%BB%E6%9C%80%E5%BE%8C%E3%81%BE%E3%81%A7%E3%82%B9%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%97%E3%81%9F%E3%82%89%E3%80%81%E4%BF%9D%E5%AD%98%E3%83%9C%E3%82%BF%E3%83%B3%E3%82%92%E3%82%82%E3%81%86%E4%B8%80%E5%BA%A6%E6%8A%BC%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82'%2C1)%3Bif(delay%3D%3Dnull)%7Breturn%3B%7DintervalId%3DsetInterval(function(scrollHeight)%7BscrollBy(0%2CscrollHeight)%3Bconst%20dataElements%3Ddocument.querySelectorAll('%5Bdata-index%5D')%3Bfor(let%20i%3D0%3Bi%20%3C%20dataElements.length%3Bi%2B%2B)%7B%5B'.sc-kHdrYz'%2C'.sc-gsFzgR'%5D.forEach((selector)%3D%3E%7Bfor(const%20removeDataElement%20of%20dataElements%5Bi%5D.querySelectorAll(selector))%7BremoveDataElement.remove()%3B%7D%7D)%3Bdata%5BdataElements%5Bi%5D.dataset.index%5D%3DdataElements%5Bi%5D.innerHTML.replaceAll('%2Fphoto%2Fm%2F'%2C'%2Fphoto%2Fl%2F')%3Bif(data%5BdataElements%5Bi%5D.dataset.index%5D.includes(%22%2Fmovie%2Fthumb%2F%22))%7Bdata%5BdataElements%5Bi%5D.dataset.index%5D%3Ddata%5BdataElements%5Bi%5D.dataset.index%5D.replaceAll(new%20RegExp('%3Cimg%20src%3D%22(https%3A%2F%2Fs3.wellnote.jp%2F%5B%5E%2F%5D%2B)%2Fmovie%2Fthumb%2F(%5B%5E%22%5D%2B)%22%20%5B%5E%3E%5D%2B%3E.%2B%3F%3C%2Fsvg%3E'%2C'ig')%2C'%3Cvideo%20src%3D%22%241%2Fmovie%2F%242.mp4%22%20controls%3E%3C%2Fvideo%3E')%3B%7D%7D%7D%2Cdelay%2C5)%3B%7Delse%7BclearInterval(intervalId)%3BintervalId%3D0%3Bconst%20style%3D'%3Cstyle%3E%5Cn.gRSkeu%7B%5Cn%20position%3A%20relative%3B%5Cn%20z-index%3A%200%3B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20width%3A%20800px%3B%5Cn%20margin%3A%200px%20auto%3B%5Cn%7D%5Cnmain%7B%5Cn%20display%3A%20block%3B%5Cn%7D%5Cnsection%7B%5Cn%20display%3A%20block%3B%5Cn%7D%5Cn.Kvggt%7B%5Cn%20flex-shrink%3A%200%3B%5Cn%7D%5Cn.umHWY%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20center%3B%5Cn%20justify-content%3A%20center%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%20gap%3A%200.5rem%3B%5Cn%7D%5Cn.encCDM%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20start%3B%5Cn%20justify-content%3A%20start%3B%5Cn%20align-items%3A%20flex-end%3B%5Cn%20gap%3A%201rem%3B%5Cn%20height%3A%202rem%3B%5Cn%7D%5Cn.hxfVks%7B%5Cn%20font-size%3A%200.875rem%3B%5Cn%20color%3A%20rgb(138%2C138%2C138)%3B%5Cn%20white-space%3A%20nowrap%3B%5Cn%20text-overflow%3A%20ellipsis%3B%5Cn%20overflow%3A%20hidden%3B%5Cn%7D%5Cn.lmmkpp%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20padding-left%3A%203.5rem%3B%5Cn%7D%5Cn.BvCGQ%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20gap%3A%201rem%3B%5Cn%7D%5Cn.fIagkU%7B%5Cn%20display%3A%20grid%3B%5Cn%20grid-template-columns%3A%20repeat(6%2C1fr)%3B%5Cn%20grid-template-rows%3A%20repeat(6%2C1fr)%3B%5Cn%20gap%3A%202px%3B%5Cn%20width%3A%20100%25%3B%5Cn%20aspect-ratio%3A%201%20%2F%201%3B%5Cn%20border-radius%3A%200.5rem%3B%5Cn%20overflow%3A%20hidden%3B%5Cn%7D%5Cn.jpBOea%7B%5Cn%20position%3A%20relative%3B%5Cn%20overflow%3A%20hidden%3B%5Cn%20cursor%3A%20pointer%3B%5Cn%7D%5Cn.jpBOea%3Aonly-child%7B%5Cn%20grid-area%3A%20span%206%20%2F%20span%206%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(2)%7B%5Cn%20grid-area%3A%20span%206%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(2)~%20.jpBOea%7B%5Cn%20grid-area%3A%20span%206%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(3)%7B%5Cn%20grid-area%3A%20span%206%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(3)~%20.sc-haTkiu%7B%5Cn%20grid-area%3A%20span%203%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(3)~%20.sc-haTkiu%7B%5Cn%20grid-area%3A%20span%203%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(4)%7B%5Cn%20grid-area%3A%20span%203%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(4)~%20.jpBOea%7B%5Cn%20grid-area%3A%20span%203%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(5)%7B%5Cn%20grid-area%3A%20span%204%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(5)%2B%20.jpBOea%7B%5Cn%20grid-area%3A%20span%204%20%2F%20span%203%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jpBOea%3Afirst-child%3Anth-last-child(5)~%20.sc-haTkiu%3Anth-child(n%2B3)%7B%5Cn%20grid-area%3A%20span%202%20%2F%20span%202%20%2F%20auto%20%2F%20auto%3B%5Cn%7D%5Cn.jnBQzU%7B%5Cn%20display%3A%20flex%3B%5Cn%20-webkit-box-pack%3A%20center%3B%5Cn%20justify-content%3A%20center%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%20text-align%3A%20center%3B%5Cn%20position%3A%20absolute%3B%5Cn%20top%3A%200px%3B%5Cn%20left%3A%200px%3B%5Cn%20height%3A%20100%25%3B%5Cn%20width%3A%20100%25%3B%5Cn%20color%3A%20rgb(255%2C255%2C255)%3B%5Cn%20background-color%3A%20rgba(0%2C0%2C0%2C0.6)%3B%5Cn%7D%5Cn.lahFaz%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20justify%3B%5Cn%20justify-content%3A%20space-between%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%20gap%3A%201rem%3B%5Cn%7D%5Cn.jvsiPh%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20start%3B%5Cn%20justify-content%3A%20flex-start%3B%5Cn%20gap%3A%200.75rem%3B%5Cn%20height%3A%202.25rem%3B%5Cn%20min-width%3A%2010rem%3B%5Cn%7D%5Cn.kHvnyo%7B%5Cn%20overflow%3A%20hidden%3B%5Cn%20border-radius%3A%2050%25%3B%5Cn%20height%3A%202.25rem%3B%5Cn%20width%3A%202.25rem%3B%5Cn%20background-color%3A%20rgb(202%2C202%2C202)%3B%5Cn%20display%3A%20flex%3B%5Cn%20-webkit-box-pack%3A%20center%3B%5Cn%20justify-content%3A%20center%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%7D%5Cn.bQuwqp%7B%5Cn%20flex-shrink%3A%200%3B%5Cn%7D%5Cn.bFfRtb%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20start%3B%5Cn%20justify-content%3A%20flex-start%3B%5Cn%20gap%3A%200.75rem%3B%5Cn%20height%3A%203.5rem%3B%5Cn%20min-width%3A%2010rem%3B%5Cn%7D%5Cn.fUNQcE%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20-webkit-box-pack%3A%20justify%3B%5Cn%20justify-content%3A%20space-between%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%20gap%3A%201rem%3B%5Cn%7D%5Cn.fqnSS%7B%5Cn%20font-size%3A%200.875rem%3B%5Cn%20color%3A%20rgb(138%2C138%2C138)%3B%5Cn%7D%5Cn.jPmKFQ%7B%5Cn%20font-weight%3A%20bold%3B%5Cn%20flex-shrink%3A%200%3B%5Cn%20white-space%3A%20nowrap%3B%5Cn%20text-overflow%3A%20ellipsis%3B%5Cn%20overflow%3A%20hidden%3B%5Cn%7D%5Cn.ibLnVU%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20-webkit-box-pack%3A%20center%3B%5Cn%20justify-content%3A%20center%3B%5Cn%20gap%3A%200.25rem%3B%5Cn%20min-width%3A%200px%3B%5Cn%7D%5Cn.iEZyrQ%7B%5Cn%20overflow%3A%20hidden%3B%5Cn%20border-radius%3A%2050%25%3B%5Cn%20height%3A%203.5rem%3B%5Cn%20width%3A%203.5rem%3B%5Cn%20background-color%3A%20rgb(202%2C202%2C202)%3B%5Cn%20display%3A%20flex%3B%5Cn%20-webkit-box-pack%3A%20center%3B%5Cn%20justify-content%3A%20center%3B%5Cn%20-webkit-box-align%3A%20center%3B%5Cn%20align-items%3A%20center%3B%5Cn%7D%5Cn.eOQRYD%7B%5Cn%20object-fit%3A%20cover%3B%5Cn%20height%3A%20100%25%3B%5Cn%20width%3A%20100%25%3B%5Cn%7D%5Cn.ipojxa%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20gap%3A%200.5rem%3B%5Cn%20padding-block-end%3A%201rem%3B%5Cn%7D%5Cn.pHbnI%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20border-block-start%3A%201px%20solid%20rgb(221%2C221%2C221)%3B%5Cn%20background-color%3A%20rgb(255%2C255%2C255)%3B%5Cn%7D%5Cn.foYUmJ%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20gap%3A%201rem%3B%5Cn%20padding%3A%201.5rem%202rem%200.75rem%3B%5Cn%7D%5Cn.dRWTIA%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20row%3B%5Cn%20border-top%3A%201px%20solid%20rgb(221%2C221%2C221)%3B%5Cn%20border-bottom%3A%201px%20solid%20rgb(221%2C221%2C221)%3B%5Cn%7D%5Cn.fsVjeU%7B%5Cn%20display%3A%20flex%3B%5Cn%20flex-direction%3A%20column%3B%5Cn%20padding-left%3A%205.5rem%3B%5Cn%20padding-right%3A%202rem%3B%5Cn%7D%5Cn.jfYeMa%7B%5Cn%20width%3A%20100%25%3B%5Cn%20height%3A%20100%25%3B%5Cn%20object-fit%3A%20cover%3B%5Cn%7D%5Cn%3C%2Fstyle%3E'%3Bconst%20blob%3Dnew%20Blob(%5B'%3Chtml%3E%5Cn%3Chead%3E%5Cn'%2Cstyle%2C'%5Cn%3C%2Fhead%3E%5Cn%3Cbody%3E%5Cn%3Cdiv%20class%3D%22sc-jKTccl%20gRSkeu%22%3E%5Cn%3Cmain%3E%5Cn%3Csection%3E%5Cn'%2CObject.values(data).join('')%2C'%5Cn%3C%2Fsection%3E%5Cn%3C%2Fmain%3E%5Cn%3C%2Fdiv%3E%5Cn%3C%2Fbody%3E%5Cn%3C%2Fhtml%3E'%5D)%3Bconst%20downloadLink%3Ddocument.createElement('a')%3BdownloadLink.download%3D'wellnote.html'%3BdownloadLink.href%3D(window.URL%20%7C%7C%20window.webkitURL).createObjectURL(blob)%3BdownloadLink.click()%3Balert('%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%95%E3%82%8C%E3%81%9FHTML%E3%82%92%E9%96%8B%E3%81%84%E3%81%A6%E3%80%81%E3%80%8C%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E5%88%A5%E5%90%8D%E3%81%A7%E4%BF%9D%E5%AD%98%E3%80%8D%E3%81%A7%E3%80%8C%E3%82%A6%E3%82%A7%E3%83%96%E3%83%9A%E3%83%BC%E3%82%B8%E3%80%81%E5%AE%8C%E5%85%A8%E3%80%8D%E3%81%A7%E4%BF%9D%E5%AD%98%E3%81%97%E3%81%A6%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84%E3%80%82')%3B%7D%7D%3Bvoid(0);">Wellnote保存</a>
+    をChromeのブックマークツールバーにドラッグ&amp;ドロップしてください
+  </li>
+  <li>
+    Wellnoteのサイトにログインして、ホーム画面に移動してください
+  </li>
+  <li>
+    ブックマークツールバーの「Wellnote保存」を押してください
+  </li>
+  <li>
+    画面左上に表示されている「保存」を押してください
+  </li>
+  <li>
+    ダイアログの内容を確認して「OK」を押してください<br/>
+    途中でスクロールが止まったら、画面中央を一度クリックしてください<br/>
+    最後までスクロールしたら、画面左上に表示されている「保存」をもう一度押してください
+  </li>
+  <li>
+    ダウンロードされたHTMLを開いて、「ページを別名で保存」で「ウェブページ、完全」で保存してください
+  </li>
+  <li>
+    ネットワーク(インターネット)を切った状態で、「ページを別名で保存」で保存したファイルを開いて、画像が表示されることを確認してください
+  </li>
+</ol>
+<h2>現在対応できてないこと</h2>
+<ol>
+  <li>
+    一度に6枚以上投稿した場合の6〜10枚目の画像の保存
+  </li>
+  <li>
+    動画の保存
+  </li>
+</ol>
+<h2>注意点</h2>
+<ol>
+  <li>
+    簡単な動作確認のため、動作の保証は出来かねます
+  </li>
+  <li>
+    本ツールを使用したことによるいかなるトラブル、被害、損失、損害等に対して当サイトは一切責任を負いません
+  </li>
+</ol>
+</div>
+</body>
+</html>
