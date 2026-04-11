@@ -1,6 +1,7 @@
 BAAI
 BLEU
 DALL
+Devstral
 Dify
 dnsmasq
 FAISS

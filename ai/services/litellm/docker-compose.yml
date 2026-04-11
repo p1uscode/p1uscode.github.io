@@ -12,8 +12,13 @@ services:
     environment:
       - HTTP_PROXY=http://mitmproxy:8080
       - HTTPS_PROXY=http://mitmproxy:8080
+      # localhost 系だけ除外 (ホスト側 Ollama への通信も mitmproxy 経由で見たいので
+      # host.docker.internal はあえて NO_PROXY に入れない)
+      - NO_PROXY=localhost,127.0.0.1
       - REQUESTS_CA_BUNDLE=/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
       - SSL_CERT_FILE=/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - mitmproxy
     command: ["--config", "/app/config.yaml", "--port", "4000"]
@@ -31,7 +36,16 @@ services:
       - proxy
     volumes:
       - mitmproxy-data:/home/mitmproxy/.mitmproxy
-    command: mitmweb --web-host 0.0.0.0 --web-port 8081 --set web_password=${MITMPROXY_WEB_PASSWORD}
+    # LiteLLM が Ollama 向けリクエストを proxy 経由で投げてくるので、
+    # mitmproxy 自身もホスト側 11434 に抜けられる必要がある
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >-
+      mitmweb
+      --web-host 0.0.0.0
+      --web-port 8081
+      --set web_password=${MITMPROXY_WEB_PASSWORD}
+      --set connection_strategy=lazy
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"

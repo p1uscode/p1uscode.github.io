@@ -97,7 +97,7 @@ LLM は典型的に 3 段階で学習される。
 - **mode collapse**: 応答の多様性が減る
 - **refusal over-triggering**: 無害な質問も拒否する
 
-現代の主要モデル (GPT-4 / Claude / Gemini) は全てこの 3 段階を経ている。
+現代の主要モデル (GPT-5.4 / Claude / Gemini) は全てこの 3 段階を経ている。
 
 ## なぜ hallucination するのか
 
@@ -132,9 +132,9 @@ context に情報があっても、LLM の attention が他に向いてしまえ
 
 LLM 側の技術的対策としては constrained decoding (正解の集合以外出さない) / retrieval augmentation / factuality 報酬モデル 等があるが、**アプリ層では hallucination を前提に設計する**のが現実的。
 
-## なぜ推論モデルは強いか (o1 / Claude thinking 等)
+## なぜ推論モデルは強いか (GPT-5.4 reasoning / Claude thinking 等)
 
-最近の「推論モデル」(OpenAI o1 / o3、Claude extended thinking、Gemini thinking) は、数学や論理パズルで著しく性能が高い。仕組みは大雑把に:
+最近の「推論モデル」(OpenAI GPT-5.4 reasoning、Claude extended thinking、Gemini thinking) は、数学や論理パズルで著しく性能が高い。仕組みは大雑把に:
 
 1. **推論 (思考) トークンを出力する訓練**: 応答の前に「考えをたくさん書く」ように強化学習
 2. **test-time compute の増加**: 1 回の応答で大量の思考トークンを消費 (数千〜数万)

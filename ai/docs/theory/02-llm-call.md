@@ -29,7 +29,7 @@ OpenAI 互換 API (= Chat Completions) の最小リクエストは、**モデル
 }
 ```
 
-- `model`: どのモデルに解かせるか。LiteLLM 経由なら `claude-sonnet-4-6` / `gemini-2.5-flash` / `gpt-4.1` 等、`services/litellm/config.yaml` で定義したエイリアスがそのまま使える
+- `model`: どのモデルに解かせるか。LiteLLM 経由なら `claude-sonnet-4-6` / `gemini-2.5-flash` / `gpt-5.4` 等、`services/litellm/config.yaml` で定義したエイリアスがそのまま使える
 - `messages`: 会話履歴。配列の**順序**が会話の順序を表し、LLM はこれを上から順に読んで「次に何を言うべきか」を推論する
 
 ### role の意味
@@ -223,7 +223,7 @@ const llm = new ChatOpenAI({
 
 - 単価はモデルごとに大きく違う (Gemini Flash は 1 M トークンあたり数十セント、Claude Opus は 10 ドル超えることも)
 - 同じ質問でも `system` prompt や履歴が長ければ `prompt_tokens` が増えて課金増
-- 推論モデル (o1/o3 等) は内部の思考トークンも `completion_tokens` に乗ってくるので、見た目の応答が短くても請求は大きい
+- 推論モデル (GPT-5.4 reasoning 等) は内部の思考トークンも `completion_tokens` に乗ってくるので、見た目の応答が短くても請求は大きい
 
 レイテンシも同じように、モデル / トークン量 / 推論深度で数 100 ms から数十秒まで幅がある。**エージェントは 1 ターンの応答のために LLM を 3〜10 回呼ぶことが普通**なので、1 呼び出しの速度 × ラウンド数が体感レイテンシになる。
 

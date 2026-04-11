@@ -73,7 +73,7 @@ AI 応答: {response}
 - **cost と latency** (評価のたびに別 LLM を叩く)
 - **judge 自体の精度** が天井になる
 
-現実的には judge には GPT-4 / Claude Opus クラスの強いモデルを使い、judge 自体の評価は人手サンプリングで定期的に校正する。
+現実的には judge には GPT-5.4 / Claude Opus クラスの強いモデルを使い、judge 自体の評価は人手サンプリングで定期的に校正する。
 
 ### (4) 人手評価 (human in the loop)
 

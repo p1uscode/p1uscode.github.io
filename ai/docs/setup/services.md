@@ -43,8 +43,13 @@
 
 ## 利用可能モデル (LiteLLM 経由)
 
-| プロバイダー | モデル |
-|---|---|
-| OpenAI | gpt-4.1, gpt-4.1-mini, gpt-4o, o3, o4-mini |
-| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5 |
-| Google | gemini-3.1-pro-preview, gemini-3-flash-preview, gemini-2.5-pro, gemini-2.5-flash |
+**前提**: `.env` の `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `GEMINI_API_KEY` のうち**使うプロバイダのキーを 1 つ以上**設定しておく必要がある。設定方法は [初期設定](bootstrap.md) の「.env の設定」節を参照。未設定のプロバイダのモデルは呼び出し時にエラーになる。
+
+| プロバイダ | モデル | 必要な環境変数 |
+|---|---|---|
+| OpenAI | gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `OPENAI_API_KEY` |
+| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
+| Google | gemini-3.1-pro-preview, gemini-3-flash-preview, gemini-2.5-pro, gemini-2.5-flash | `GEMINI_API_KEY` |
+| Ollama (ローカル) | `ollama/<tag>` (例: `ollama/qwen3.5:9b`) — pull 済みの任意モデル | 不要 ([setup/ollama](ollama.md)) |
+
+モデル一覧とルーティング設定は [`ai/services/litellm/config.yaml`](https://github.com/p1uscode/p1uscode.github.io/blob/main/ai/services/litellm/config.yaml) を参照。追加 / 削除する場合はこのファイルを編集して `mise run down:litellm && mise run up:litellm`。

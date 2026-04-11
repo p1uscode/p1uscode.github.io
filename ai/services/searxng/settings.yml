@@ -1,0 +1,18 @@
+# SearXNG 設定。デフォルト設定を継承した上で最小限の上書きだけを行う。
+# 詳細: https://docs.searxng.org/admin/settings/settings.html
+use_default_settings: true
+
+general:
+  instance_name: "p1uscode ai lab"
+
+server:
+  # SEARXNG_SECRET 環境変数が起動時に上書きするので placeholder で OK
+  secret_key: "change-me"
+  limiter: false
+  image_proxy: true
+
+search:
+  # agent-demo や LangChain / LiteLLM からの programmatic アクセスに必要
+  formats:
+    - html
+    - json

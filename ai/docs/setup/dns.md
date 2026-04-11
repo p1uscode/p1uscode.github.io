@@ -2,9 +2,9 @@
 
 全サービスは `*.home.arpa` ドメインで動作する。Traefik がポート80で受けてホスト名でルーティングするため、**サービス起動前にいずれかのDNS設定が必要**。
 
-## オプション1: /etc/hosts (このMacのみ・シンプル)
+## オプション1: /etc/hosts (今操作している端末のみ・シンプル)
 
-サービスごとに1行ずつ追加する。他デバイスからのアクセスは不可。
+サービスごとに1行ずつ追加する。**ワイルドカードは使えない**ので、新しいサービスを足したらその都度追記が必要。編集した端末自身からしかアクセスできず、同じ LAN の別端末 (スマホ / 別 PC) からは解決できない。
 
 ```sh
 sudo sh -c 'cat >> /etc/hosts << EOF
@@ -29,7 +29,7 @@ EOF'
 brew install dnsmasq
 
 # 2. 設定ファイル編集
-#    <HOST_IP> はこのMacのローカルIP (ifconfig | grep "inet " | grep -v 127 で確認)
+#    <HOST_IP> は dnsmasq を動かす端末のローカル IP (ifconfig | grep "inet " | grep -v 127 で確認)
 sudo vi $(brew --prefix)/etc/dnsmasq.conf
 ```
 

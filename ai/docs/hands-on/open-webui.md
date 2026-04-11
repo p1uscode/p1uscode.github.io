@@ -26,8 +26,9 @@
 
 左上のモデル選択メニューをクリックすると、**LiteLLM 経由で利用可能な全モデル**が並んでいるはず:
 
+- `ollama/<tag>`
+- `gpt-5.4` / `gpt-5.4-mini` / `gpt-5.4-nano`
 - `claude-opus-4-6` / `claude-sonnet-4-6` / `claude-haiku-4-5`
-- `gpt-4.1` / `gpt-4.1-mini` / `gpt-4o` / `o3` / `o4-mini`
 - `gemini-3.1-pro-preview` / `gemini-3-flash-preview` / `gemini-2.5-pro` / `gemini-2.5-flash`
 
 この一覧は `services/litellm/config.yaml` の `model_list` がそのまま見えているだけ。Open WebUI は LiteLLM を「1 個の OpenAI 互換プロバイダ」として認識していて、その向こう側に複数モデルが並んでいる構造。
@@ -77,13 +78,7 @@
 日本の政策金利の近年の推移と、今後の見通しについて 500 文字程度でまとめてください。
 ```
 
-応答が返ってきたら、**Open WebUI のメッセージ下部**を見ると:
-
-- 使用したモデル名
-- 応答時間
-- (モデルによっては) トークン数
-
-が表示されている。これは後で Langfuse でも同じ情報が見える ([ハンズオン 2](langfuse-traces.md))。
+後で Langfuse で送受信内容を確認する ([ハンズオン 2](langfuse-traces.md))。
 
 ### 7. マルチターンで会話を続ける
 
@@ -117,7 +112,7 @@ Open WebUI (コンテナ)
 LiteLLM (コンテナ)
   │ HTTP (provider 固有形式に変換)
   ▼
-Anthropic / OpenAI / Gemini (外部 API)
+Anthropic / OpenAI / Gemini (外部 API) / Ollama (host.docker.internal:11434)
   │ レスポンス
   ▼
 LiteLLM
@@ -141,7 +136,3 @@ Open WebUI
 | 「今の時間は?」が答えられない | [01 登場人物と責任範囲](../theory/01-overview.md) Q1 |
 | マルチターンで文脈が繋がる | [04 Messages と state](../theory/04-messages-state.md) |
 | 長い質問ほどトークン消費が増える | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |
-
-## 次
-
-次のハンズオンでは、ここで投げた全ての会話が Langfuse に残っているので、それを可視化して読み解く: [Langfuse でトレースを読む](langfuse-traces.md)。

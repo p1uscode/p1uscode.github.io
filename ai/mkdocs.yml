@@ -10,7 +10,6 @@ nav:
     - mise: setup/mise.md
     - DNS: setup/dns.md
     - Ollama: setup/ollama.md
-    - agent-demo: setup/agent-demo.md
   - Hands-on:
     - hands-on/README.md
     - 1. Open WebUI: hands-on/open-webui.md

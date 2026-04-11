@@ -80,8 +80,7 @@ LLM が**一度に覚えていられるトークンの上限**。リクエスト
 
 | モデル | だいたいの context window |
 |---|---|
-| GPT-4.1 系 | 1M トークン級 |
-| o3 / o4-mini | 200K 前後 |
+| GPT-5.4 系 (gpt-5.4 / mini / nano) | 1M トークン級 |
 | Claude Opus 4.6 / Sonnet 4.6 / Haiku 4.5 | 200K (extended thinking モードで 1M になるものもあり) |
 | Gemini 2.5 Pro | 1M 〜 2M |
 | Gemini 2.5 Flash | 1M 級 |

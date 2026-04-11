@@ -114,7 +114,7 @@ agent-demo は LangChain のデフォルト挙動 (エラーを `tool` メッセ
 
 LLM API 自体が失敗するパターン:
 
-- 429 rate limit → リトライ or [LiteLLM のフォールバック](../setup/agent-demo.md) で別モデルへ切り替え
+- 429 rate limit → リトライ or [LiteLLM](../setup/services.md) のフォールバック設定で別モデルへ切り替え
 - 5xx サーバエラー → リトライ
 - 400 bad request → リクエストが壊れている (messages が context window 超え、ツールスキーマ不正 等)。即座に失敗
 - 401 認証エラー → 即座に失敗
