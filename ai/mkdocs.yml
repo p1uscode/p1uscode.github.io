@@ -20,23 +20,23 @@ nav:
     - 5. End-to-end: hands-on/end-to-end.md
   - Theory:
     - theory/README.md
-    - 00 登場人物と責任範囲: theory/00-overview.md
-    - 01 LLM の 1 回の呼び出し: theory/01-llm-call.md
-    - 02 トークンとコンテキストウィンドウ: theory/02-tokens-context.md
-    - 03 Messages と state: theory/03-messages-state.md
-    - 04 Tool calling: theory/04-tool-calling.md
-    - 05 エージェントループ: theory/05-agent-loop.md
-    - 06 記憶の多層モデル: theory/06-memory.md
-    - 07 Observability / tracing: theory/07-observability.md
-    - 08 埋め込みと近傍検索: theory/08-embeddings.md
-    - 09 RAG の基本: theory/09-rag.md
-    - 10 評価 (LLM-as-a-judge): theory/10-evaluation.md
-    - 11 サンプリングパラメータ: theory/11-sampling.md
-    - 12 system prompt の設計: theory/12-system-prompt.md
-    - 13 ガードとプロンプトインジェクション: theory/13-guards.md
-    - 14 LLM の仕組み: theory/14-llm-internals.md
-    - 15 マルチモーダルと他のモデル: theory/15-multimodal.md
-    - 16 エンジニアリングの 3 層: theory/16-engineering-layers.md
-    - 17 ローカル LLM とクラウド LLM: theory/17-local-vs-cloud-llm.md
-    - 18 主要 AI ツールの全体像: theory/18-ai-tools-overview.md
-    - 19 全体の締めくくり: theory/19-closing.md
+    - 01 登場人物と責任範囲: theory/01-overview.md
+    - 02 LLM の 1 回の呼び出し: theory/02-llm-call.md
+    - 03 トークンとコンテキストウィンドウ: theory/03-tokens-context.md
+    - 04 Messages と state: theory/04-messages-state.md
+    - 05 Tool calling: theory/05-tool-calling.md
+    - 06 エージェントループ: theory/06-agent-loop.md
+    - 07 記憶の多層モデル: theory/07-memory.md
+    - 08 Observability / tracing: theory/08-observability.md
+    - 09 埋め込みと近傍検索: theory/09-embeddings.md
+    - 10 RAG の基本: theory/10-rag.md
+    - 11 評価 (LLM-as-a-judge): theory/11-evaluation.md
+    - 12 サンプリングパラメータ: theory/12-sampling.md
+    - 13 system prompt の設計: theory/13-system-prompt.md
+    - 14 ガードとプロンプトインジェクション: theory/14-guards.md
+    - 15 LLM の仕組み: theory/15-llm-internals.md
+    - 16 マルチモーダルと他のモデル: theory/16-multimodal.md
+    - 17 エンジニアリングの 3 層: theory/17-engineering-layers.md
+    - 18 ローカル LLM とクラウド LLM: theory/18-local-vs-cloud-llm.md
+    - 19 主要 AI ツールの全体像: theory/19-ai-tools-overview.md
+    - 20 全体の締めくくり: theory/20-closing.md

@@ -1,6 +1,6 @@
 # マルチモーダルと他のモデル
 
-ここまでは「LLM = テキスト in / テキスト out」で話を進めてきた。現実には AI モデルは**画像・音声・動画・ベクトル**等様々なモダリティを扱っている。この章では主要な「他のモデル」を整理し、本リポジトリの 00-14 章の知識が**そのまま応用できる**ことを示す。
+ここまでは「LLM = テキスト in / テキスト out」で話を進めてきた。現実には AI モデルは**画像・音声・動画・ベクトル**等様々なモダリティを扱っている。この章では主要な「他のモデル」を整理し、本リポジトリの 01-15 章の知識が**そのまま応用できる**ことを示す。
 
 ## モダリティの一覧
 
@@ -168,7 +168,7 @@ Stable Diffusion や Flux は M 系 Mac / GPU で動かせる。ComfyUI / Automa
 
 ## 埋め込みモデル (再訪)
 
-[第 8 章 埋め込み](08-embeddings.md) で扱った。text-embedding-3 / BGE / CLIP 等。
+[第 9 章 埋め込み](09-embeddings.md) で扱った。text-embedding-3 / BGE / CLIP 等。
 
 - **text embedding**: 文字列 → ベクトル
 - **multimodal embedding (CLIP / SigLIP 等)**: 画像とテキストを**同じ空間に埋め込む** → 画像検索がテキストクエリで可能
@@ -194,7 +194,7 @@ CLIP の応用例:
                                     - DALL-E / Flux (image gen)
                                     - Runway (video gen)
                                     - CLIP (multimodal search)
-                                    - search / calc / fetch (第 4 章)
+                                    - search / calc / fetch (第 5 章)
                                             │
                                             ▼
                                         結果
@@ -252,5 +252,5 @@ CLIP の応用例:
 - **ASR / TTS / 画像 / 動画生成** はエージェントから**tool として**扱うのが基本
 - **omni-modal モデル** (GPT-4o / Gemini / Claude Opus 4) は単一モデルで複数モダリティを扱う。リアルタイム音声対話も可能
 - **「エージェント = コアモデル + ツール + state」という骨格はどのモダリティでも同じ**
-- 章 00-14 で学んだ知識は全てそのまま他モダリティに応用できる
+- 章 01-15 で学んだ知識は全てそのまま他モダリティに応用できる
 - 画像生成 / 動画生成は GPU 依存なのでローカル実行はホスト直インストール (Ollama と同じ理由、[setup/ollama.md](../setup/ollama.md))

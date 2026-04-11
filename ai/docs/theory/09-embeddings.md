@@ -1,6 +1,6 @@
 # 埋め込みと近傍検索
 
-[第 6 章 記憶の多層モデル](06-memory.md) の L4 (外部ストレージによる長期記憶) と、次章で扱う **RAG (Retrieval-Augmented Generation)** の両方に共通する基盤技術が「埋め込み (embedding)」と「近傍検索 (nearest neighbor search)」。この章ではその仕組みを最短距離で説明する。
+[第 7 章 記憶の多層モデル](07-memory.md) の L4 (外部ストレージによる長期記憶) と、次章で扱う **RAG (Retrieval-Augmented Generation)** の両方に共通する基盤技術が「埋め込み (embedding)」と「近傍検索 (nearest neighbor search)」。この章ではその仕組みを最短距離で説明する。
 
 ## 文字列は直接比較できない
 

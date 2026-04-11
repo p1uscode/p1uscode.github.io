@@ -64,7 +64,7 @@
 今の時間は何時ですか?
 ```
 
-多くのモデルは「私は現在の時刻を知りません」と返すはず。これは [theory 00 登場人物](../theory/00-overview.md) の Q1 の実機確認。
+多くのモデルは「私は現在の時刻を知りません」と返すはず。これは [theory 00 登場人物](../theory/01-overview.md) の Q1 の実機確認。
 
 - **Open WebUI にはツールが無い**ので、LLM 単体では時刻を知らない
 - 同じ質問を agent-demo に投げると `now` ツールを呼んで答える ([ハンズオン 4](agent-demo.md) で確認)
@@ -100,7 +100,7 @@ TypeScript の async/await について簡単に説明してください。
 ```
 
 - 2 回目の「さっきの話」が通じるのは、**Open WebUI が会話履歴を毎ターン LiteLLM に送り直している**から
-- これが [theory 03 Messages と state](../theory/03-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
+- これが [theory 03 Messages と state](../theory/04-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
 - LiteLLM から見ると毎回独立したリクエストで、前回の記憶は無い
 
 ### 8. 裏で何が起きているか
@@ -136,11 +136,11 @@ Open WebUI
 
 | 観察 | 対応する座学 |
 |---|---|
-| モデル一覧が LiteLLM 経由で並ぶ | [01 LLM の 1 回の呼び出し](../theory/01-llm-call.md) "OpenAI 互換がデファクト" |
-| 同じ質問で応答スタイルが違う | [14 LLM の仕組み](../theory/14-llm-internals.md) "pretraining と instruction tuning の結果" |
-| 「今の時間は?」が答えられない | [00 登場人物と責任範囲](../theory/00-overview.md) Q1 |
-| マルチターンで文脈が繋がる | [03 Messages と state](../theory/03-messages-state.md) |
-| 長い質問ほどトークン消費が増える | [02 トークンとコンテキストウィンドウ](../theory/02-tokens-context.md) |
+| モデル一覧が LiteLLM 経由で並ぶ | [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) "OpenAI 互換がデファクト" |
+| 同じ質問で応答スタイルが違う | [15 LLM の仕組み](../theory/15-llm-internals.md) "pretraining と instruction tuning の結果" |
+| 「今の時間は?」が答えられない | [01 登場人物と責任範囲](../theory/01-overview.md) Q1 |
+| マルチターンで文脈が繋がる | [04 Messages と state](../theory/04-messages-state.md) |
+| 長い質問ほどトークン消費が増える | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |
 
 ## 次
 

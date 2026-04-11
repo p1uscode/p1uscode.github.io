@@ -46,7 +46,7 @@ Open WebUI (or 他のクライアント) から LiteLLM を叩くと、裏で La
 
 - Input: `messages` 配列がまるごと表示される (system / user / assistant / tool)
 - Output: LLM が返した `assistant` メッセージ (content or tool_calls)
-- **これが [theory 01 LLM の 1 回の呼び出し](../theory/01-llm-call.md) で書いた JSON の実体**
+- **これが [theory 01 LLM の 1 回の呼び出し](../theory/02-llm-call.md) で書いた JSON の実体**
 
 **右側のメタデータ**
 
@@ -63,7 +63,7 @@ Open WebUI (or 他のクライアント) から LiteLLM を叩くと、裏で La
 - **レイテンシの違い**: Gemini Flash は速い、Claude Sonnet / Opus は遅い
 - **コストの違い**: モデル単価 × トークン数
 
-これが [theory 02 トークンとコンテキストウィンドウ](../theory/02-tokens-context.md) で書いた「モデル間でトークン数がずれる」の実機確認。
+これが [theory 02 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) で書いた「モデル間でトークン数がずれる」の実機確認。
 
 ### 5. 複数ターンの会話を Traces で追う
 
@@ -72,7 +72,7 @@ Open WebUI (or 他のクライアント) から LiteLLM を叩くと、裏で La
 - 1 件目: 最初の質問 → TypeScript 説明
 - 2 件目: 「さっきの話を子供向けに」 → 2 件目の Input には**1 件目の user/assistant も含まれている**
 
-2 件目の Input を開いて `messages` を確認すると、messages 配列に過去のやり取りが全部詰まっていることが確認できる。これが「state = messages 配列」の目で見える形 ([theory 03](../theory/03-messages-state.md))。
+2 件目の Input を開いて `messages` を確認すると、messages 配列に過去のやり取りが全部詰まっていることが確認できる。これが「state = messages 配列」の目で見える形 ([theory 03](../theory/04-messages-state.md))。
 
 ### 6. Sessions タブ
 
@@ -100,7 +100,7 @@ Traces タブで上部のフィルタ条件に `tags` contains `User-Agent: lang
 
 ### 9. デバッグ視点で眺める
 
-本番でエージェントがヘンな応答をしたとき、Langfuse でやることは [theory 07 Observability](../theory/07-observability.md) のデバッグ手順そのもの:
+本番でエージェントがヘンな応答をしたとき、Langfuse でやることは [theory 07 Observability](../theory/08-observability.md) のデバッグ手順そのもの:
 
 1. 該当時間帯 + ユーザ / セッション で絞り込む
 2. 木を開いて duration の長いところ / エラーのあるところを見つける
@@ -114,11 +114,11 @@ Traces タブで上部のフィルタ条件に `tags` contains `User-Agent: lang
 
 | 観察 | 対応する座学 |
 |---|---|
-| `messages` 配列が Input に丸ごと入っている | [03 Messages と state](../theory/03-messages-state.md) |
-| モデルごとにトークン数が違う | [02 トークンとコンテキストウィンドウ](../theory/02-tokens-context.md) |
-| Langfuse のセッションはタグであって state ではない | [03 Messages と state](../theory/03-messages-state.md) の Langfuse session セクション |
-| trace / span の親子構造 | [07 Observability](../theory/07-observability.md) |
-| sessionId / userId / tags の使い分け | [07 Observability](../theory/07-observability.md) |
+| `messages` 配列が Input に丸ごと入っている | [04 Messages と state](../theory/04-messages-state.md) |
+| モデルごとにトークン数が違う | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |
+| Langfuse のセッションはタグであって state ではない | [04 Messages と state](../theory/04-messages-state.md) の Langfuse session セクション |
+| trace / span の親子構造 | [08 Observability](../theory/08-observability.md) |
+| sessionId / userId / tags の使い分け | [08 Observability](../theory/08-observability.md) |
 
 ## 次
 

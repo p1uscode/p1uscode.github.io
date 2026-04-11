@@ -99,7 +99,7 @@ LangGraph (root, 親 span)
 - iter 2 の Output: content=null, tool_calls=[calc("42+12")]
 - ... という具合
 
-**これが [theory 05 エージェントループ](../theory/05-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
+**これが [theory 05 エージェントループ](../theory/06-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
 
 ### ステップ 2-4. mitmproxy で API を見る (オプション)
 
@@ -192,13 +192,13 @@ you> ありがとう
 
 このハンズオンは横串の総合演習なので、対応する章が多い:
 
-- [00 登場人物と責任範囲](../theory/00-overview.md) — 各アクターの役割
-- [01 LLM の 1 回の呼び出し](../theory/01-llm-call.md) — Open WebUI 単発の実体
-- [03 Messages と state](../theory/03-messages-state.md) — messages 配列が育つ様子
-- [04 Tool calling](../theory/04-tool-calling.md) — tool_calls の往復
-- [05 エージェントループ](../theory/05-agent-loop.md) — 3 iter の連鎖
-- [07 Observability](../theory/07-observability.md) — 階層 span の読み方
-- [16 エンジニアリングの 3 層](../theory/16-engineering-layers.md) — 切り分けの視点
+- [01 登場人物と責任範囲](../theory/01-overview.md) — 各アクターの役割
+- [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) — Open WebUI 単発の実体
+- [04 Messages と state](../theory/04-messages-state.md) — messages 配列が育つ様子
+- [05 Tool calling](../theory/05-tool-calling.md) — tool_calls の往復
+- [06 エージェントループ](../theory/06-agent-loop.md) — 3 iter の連鎖
+- [08 Observability](../theory/08-observability.md) — 階層 span の読み方
+- [17 エンジニアリングの 3 層](../theory/17-engineering-layers.md) — 切り分けの視点
 
 ## その先
 
@@ -206,8 +206,8 @@ you> ありがとう
 
 - **座学の章の読み込み**: 各ハンズオンで「気になった」章に戻って深掘り
 - **agent-demo の拡張**: `tools.ts` に新しいツールを足して挙動を観察 (ファイル読み取り / DB クエリ / 外部 API 等)
-- **RAG 統合**: Qdrant を使った長期記憶を入れて、agent-demo に `search_knowledge` ツールを追加 ([theory 08-09](../theory/08-embeddings.md))
-- **評価**: Langfuse の Dataset を作り、プロンプト変更前後でスコア比較 ([theory 10](../theory/10-evaluation.md))
-- **ガード**: 入力 / tool_calls / 結果 / 出力 の 4 層ガードを実装 ([theory 13](../theory/13-guards.md))
+- **RAG 統合**: Qdrant を使った長期記憶を入れて、agent-demo に `search_knowledge` ツールを追加 ([theory 09-10](../theory/09-embeddings.md))
+- **評価**: Langfuse の Dataset を作り、プロンプト変更前後でスコア比較 ([theory 10](../theory/11-evaluation.md))
+- **ガード**: 入力 / tool_calls / 結果 / 出力 の 4 層ガードを実装 ([theory 13](../theory/14-guards.md))
 
 自分のユースケースに一番近いところから手を入れていけばよい。
