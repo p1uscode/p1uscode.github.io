@@ -69,6 +69,11 @@ plugins:
         - en
   - monorepo
 
+extra:
+  analytics:
+    provider: google
+    property: G-P9Q5MX4F86
+
 nav:
   - Home: index.md
   - AI: '!include ./ai/mkdocs.yml'
