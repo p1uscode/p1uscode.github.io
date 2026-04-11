@@ -1,0 +1,16 @@
+services:
+  nginx:
+    ports: !reset []
+    networks:
+      - default
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      # HTTP router
+      - "traefik.http.routers.dify.rule=Host(`${TRAEFIK_HOST:-dify.home.arpa}`)"
+      - "traefik.http.routers.dify.entrypoints=web"
+      - "traefik.http.services.dify.loadbalancer.server.port=${NGINX_PORT:-80}"
+networks:
+  proxy:
+    external: true

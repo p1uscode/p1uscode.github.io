@@ -1,0 +1,42 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:${OPEN_WEBUI_VERSION}
+    restart: always
+    networks:
+      - proxy
+    env_file:
+      - ../../.env
+    environment:
+      # Ollama
+      - ENABLE_OLLAMA_API=true
+
+      # OpenAI compatible API (LiteLLM)
+      - ENABLE_OPENAI_API=true
+
+      # Auth
+      - WEBUI_AUTH=false
+      - ENABLE_SIGNUP=false
+
+      # 環境変数をUIの設定より常に優先する
+      - ENABLE_PERSISTENT_CONFIG=false
+
+      # デフォルトモデルパラメータ（thinking off）
+      - DEFAULT_MODEL_PARAMS={"thinking":false}
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - open-webui:/app/backend/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.open-webui.rule=Host(`open-webui.home.arpa`)"
+      - "traefik.http.routers.open-webui.entrypoints=web"
+      - "traefik.http.services.open-webui.loadbalancer.server.port=8080"
+
+volumes:
+  open-webui:
+
+networks:
+  proxy:
+    external: true

@@ -1,0 +1,23 @@
+services:
+  qdrant:
+    image: docker.io/qdrant/qdrant:${QDRANT_VERSION}
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__API_KEY=${QDRANT_API_KEY}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.qdrant.rule=Host(`qdrant.home.arpa`)"
+      - "traefik.http.routers.qdrant.entrypoints=web"
+      - "traefik.http.services.qdrant.loadbalancer.server.port=6333"
+
+volumes:
+  qdrant_data:
+
+networks:
+  proxy:
+    external: true

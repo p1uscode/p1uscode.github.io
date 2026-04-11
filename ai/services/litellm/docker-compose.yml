@@ -1,0 +1,47 @@
+services:
+  litellm:
+    image: ghcr.io/berriai/litellm:${LITELLM_VERSION}
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - mitmproxy-data:/home/mitmproxy/.mitmproxy:ro
+    env_file:
+      - ../../.env
+    environment:
+      - HTTP_PROXY=http://mitmproxy:8080
+      - HTTPS_PROXY=http://mitmproxy:8080
+      - REQUESTS_CA_BUNDLE=/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
+      - SSL_CERT_FILE=/home/mitmproxy/.mitmproxy/mitmproxy-ca-cert.pem
+    depends_on:
+      - mitmproxy
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.litellm.rule=Host(`litellm.home.arpa`)"
+      - "traefik.http.routers.litellm.entrypoints=web"
+      - "traefik.http.services.litellm.loadbalancer.server.port=4000"
+
+  mitmproxy:
+    image: mitmproxy/mitmproxy:${MITMPROXY_VERSION}
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - mitmproxy-data:/home/mitmproxy/.mitmproxy
+    command: mitmweb --web-host 0.0.0.0 --web-port 8081 --set web_password=${MITMPROXY_WEB_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.mitmproxy.rule=Host(`mitmproxy.home.arpa`)"
+      - "traefik.http.routers.mitmproxy.entrypoints=web"
+      - "traefik.http.services.mitmproxy.loadbalancer.server.port=8081"
+
+volumes:
+  mitmproxy-data:
+
+networks:
+  proxy:
+    external: true

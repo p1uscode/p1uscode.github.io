@@ -1,0 +1,176 @@
+[tools]
+jq = "1.8.1"
+
+[env]
+_.file = ".env"
+
+[tasks.clone]
+description = "Clone dify repository at the pinned tag"
+run = """
+#!/usr/bin/env bash
+set -e
+if [ -d "services/dify/dify/.git" ]; then
+  echo "dify: already cloned, fetching tag ${DIFY_TAG}"
+  git -C services/dify/dify fetch --tags origin
+  git -C services/dify/dify checkout "${DIFY_TAG}"
+else
+  git clone --depth 1 --branch "${DIFY_TAG}" https://github.com/langgenius/dify.git services/dify/dify
+fi
+"""
+
+[tasks.setup]
+description = "Initial setup: clone repos and create docker network"
+depends = ["clone"]
+run = "docker network create proxy 2>/dev/null || true"
+
+# ── up ────────────────────────────────────────────────────────────
+
+[tasks."up:traefik"]
+description = "Start traefik"
+run = "docker compose -f services/traefik/docker-compose.yml up -d"
+
+[tasks."up:dify"]
+description = "Start dify"
+run = """
+docker compose -p dify \
+  -f services/dify/dify/docker/docker-compose.yaml \
+  -f services/dify/docker-compose.override.yaml \
+  up -d
+"""
+
+[tasks."up:litellm"]
+description = "Start litellm"
+run = "docker compose -f services/litellm/docker-compose.yml up -d"
+
+[tasks."up:open-webui"]
+description = "Start open-webui"
+run = "docker compose -f services/open-webui/docker-compose.yml up -d"
+
+[tasks."up:langfuse"]
+description = "Start langfuse (LLM observability)"
+run = "docker compose -f services/langfuse/docker-compose.yml up -d"
+
+[tasks."up:searxng"]
+description = "Start searxng (metasearch engine)"
+run = "docker compose -f services/searxng/docker-compose.yml up -d"
+
+[tasks."up:qdrant"]
+description = "Start qdrant (vector DB)"
+run = "docker compose -f services/qdrant/docker-compose.yml up -d"
+
+[tasks."up:n8n"]
+description = "Start n8n (workflow automation)"
+run = "docker compose -f services/n8n/docker-compose.yml up -d"
+
+[tasks.up]
+description = "Start all services"
+depends = [
+  "up:traefik",
+  "up:dify",
+  "up:litellm",
+  "up:open-webui",
+  "up:langfuse",
+  "up:searxng",
+  "up:qdrant",
+  "up:n8n",
+]
+
+# ── down ──────────────────────────────────────────────────────────
+
+[tasks."down:traefik"]
+description = "Stop traefik"
+run = "docker compose -f services/traefik/docker-compose.yml down"
+
+[tasks."down:dify"]
+description = "Stop dify"
+run = """
+docker compose -p dify \
+  -f services/dify/dify/docker/docker-compose.yaml \
+  -f services/dify/docker-compose.override.yaml \
+  down
+"""
+
+[tasks."down:litellm"]
+description = "Stop litellm"
+run = "docker compose -f services/litellm/docker-compose.yml down"
+
+[tasks."down:open-webui"]
+description = "Stop open-webui"
+run = "docker compose -f services/open-webui/docker-compose.yml down"
+
+[tasks."down:langfuse"]
+description = "Stop langfuse"
+run = "docker compose -f services/langfuse/docker-compose.yml down"
+
+[tasks."down:searxng"]
+description = "Stop searxng"
+run = "docker compose -f services/searxng/docker-compose.yml down"
+
+[tasks."down:qdrant"]
+description = "Stop qdrant"
+run = "docker compose -f services/qdrant/docker-compose.yml down"
+
+[tasks."down:n8n"]
+description = "Stop n8n"
+run = "docker compose -f services/n8n/docker-compose.yml down"
+
+[tasks.down]
+description = "Stop all services"
+depends = [
+  "down:traefik",
+  "down:dify",
+  "down:litellm",
+  "down:open-webui",
+  "down:langfuse",
+  "down:searxng",
+  "down:qdrant",
+  "down:n8n",
+]
+
+# ── update ────────────────────────────────────────────────────────
+
+[tasks."update:dify"]
+description = "Pull dify images for the pinned tag (bump DIFY_TAG in tasks.clone to upgrade)"
+run = """
+#!/usr/bin/env bash
+set -e
+docker compose -p dify \
+  -f services/dify/dify/docker/docker-compose.yaml \
+  -f services/dify/docker-compose.override.yaml \
+  pull
+"""
+
+[tasks.update]
+description = "Pull latest images for all services"
+run = """
+#!/usr/bin/env bash
+docker compose -f services/traefik/docker-compose.yml pull
+docker compose -f services/litellm/docker-compose.yml pull
+docker compose -f services/open-webui/docker-compose.yml pull
+docker compose -f services/langfuse/docker-compose.yml pull
+docker compose -f services/searxng/docker-compose.yml pull
+docker compose -f services/qdrant/docker-compose.yml pull
+docker compose -f services/n8n/docker-compose.yml pull
+"""
+
+# ── agent-demo ────────────────────────────────────────────────────
+
+[tasks."agent-single"]
+description = "Run the LangChain agent demo (single-shot; pass prompt as args after --)"
+dir = "examples/agent-demo"
+run = "mise exec -- npm run agent-single --"
+
+[tasks."agent-chat"]
+description = "Run the LangChain agent demo in interactive chat mode"
+dir = "examples/agent-demo"
+run = "mise exec -- npm run agent-chat"
+
+[tasks."agent:ci"]
+description = "Install agent-demo dependencies from lockfile (reproducible)"
+dir = "examples/agent-demo"
+run = "mise exec -- npm ci"
+
+[tasks."agent:install"]
+description = "Install agent-demo dependencies (updates lockfile; use for adding/updating deps)"
+dir = "examples/agent-demo"
+run = "mise exec -- npm install"

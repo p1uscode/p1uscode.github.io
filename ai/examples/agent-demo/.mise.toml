@@ -1,0 +1,5 @@
+[tools]
+node = "24.14.1"
+
+[env]
+_.file = ".env"

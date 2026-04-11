@@ -1,0 +1,37 @@
+[tools]
+python = "3.14.4"
+uv = "0.11.6"
+node = "24.14.1"
+lychee = "0.23.0"
+
+[tasks.docs-serve]
+description = "MkDocs Material のローカルサーバ起動 (http://127.0.0.1:8000)"
+run = "uv run mkdocs serve"
+
+[tasks.docs-build]
+description = "MkDocs Material で静的サイトを生成 (出力: site/、--strict で warning は fail)"
+run = "uv run mkdocs build --strict"
+
+[tasks.docs-sync]
+description = "ドキュメント用 Python 依存を uv.lock に同期"
+run = "uv sync --frozen"
+
+[tasks.docs-install]
+description = "lint / spell / lint-staged 用 npm devDependencies をロック通りに install"
+run = "npm ci"
+
+[tasks.docs-lint]
+description = "markdownlint-cli2 で Markdown 構造をチェック"
+run = "npx markdownlint-cli2"
+
+[tasks.docs-spell]
+description = "cspell で綴りチェック"
+run = "npx cspell --no-progress --no-summary --dot '**/*.md'"
+
+[tasks.docs-links]
+description = "lychee で Markdown 中のリンク切れをチェック"
+run = "lychee --no-progress --offline --exclude-path node_modules --exclude-path .venv --exclude-path site --exclude-path ai/services --exclude-path ai/examples/agent-demo/node_modules '**/*.md'"
+
+[tasks.docs-check]
+description = "lint + spell + links + mkdocs build を一括実行 (CI と同じ内容)"
+depends = ["docs-lint", "docs-spell", "docs-links", "docs-build"]

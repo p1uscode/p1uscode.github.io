@@ -1,0 +1,16 @@
+config:
+  default: true
+  # MD013 (line-length) は日本語プローズとの相性が悪く (自然な折り返し位置がない)
+  # 大量の偽陽性を生むため無効化している
+  MD013: false
+  MD024:
+    siblings_only: true
+  MD033: false
+  MD036: false
+  MD040: false
+  MD041: false
+
+gitignore: true
+
+globs:
+  - "**/*.md"

@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+# GUI / IDE から起動された git は PATH に mise が居ないことがあるので解決する
+if ! command -v mise >/dev/null 2>&1; then
+  for candidate in /opt/homebrew/bin/mise /usr/local/bin/mise "$HOME/.local/bin/mise"; do
+    if [ -x "$candidate" ]; then
+      export PATH="$(dirname "$candidate"):$PATH"
+      break
+    fi
+  done
+fi
+
+exec mise exec -- npx lint-staged

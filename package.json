@@ -1,0 +1,24 @@
+{
+  "name": "p1uscode-docs-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Docs lint / spell / git hooks for p1uscode.github.io",
+  "scripts": {
+    "prepare": "husky",
+    "lint:md": "markdownlint-cli2",
+    "spell": "cspell --no-progress --no-summary --dot '**/*.md'",
+    "check": "npm run lint:md && npm run spell"
+  },
+  "devDependencies": {
+    "cspell": "8.19.4",
+    "husky": "9.1.7",
+    "lint-staged": "15.5.2",
+    "markdownlint-cli2": "0.17.2"
+  },
+  "lint-staged": {
+    "*.md": [
+      "markdownlint-cli2 --fix",
+      "cspell --no-must-find-files"
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+model_list:
+  # OpenAI
+  - model_name: gpt-4.1
+    litellm_params:
+      model: openai/gpt-4.1
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: gpt-4.1-mini
+    litellm_params:
+      model: openai/gpt-4.1-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: gpt-4o
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: o3
+    litellm_params:
+      model: openai/o3
+      api_key: os.environ/OPENAI_API_KEY
+
+  - model_name: o4-mini
+    litellm_params:
+      model: openai/o4-mini
+      api_key: os.environ/OPENAI_API_KEY
+
+  # Anthropic
+  - model_name: claude-opus-4-6
+    litellm_params:
+      model: anthropic/claude-opus-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  - model_name: claude-sonnet-4-6
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  - model_name: claude-haiku-4-5
+    litellm_params:
+      model: anthropic/claude-haiku-4-5-20251001
+      api_key: os.environ/ANTHROPIC_API_KEY
+
+  # Google Gemini
+  - model_name: gemini-3.1-pro-preview
+    litellm_params:
+      model: gemini/gemini-3.1-pro-preview
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: gemini-3-flash-preview
+    litellm_params:
+      model: gemini/gemini-3-flash-preview
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: gemini-2.5-pro
+    litellm_params:
+      model: gemini/gemini-2.5-pro
+      api_key: os.environ/GEMINI_API_KEY
+
+  - model_name: gemini-2.5-flash
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/GEMINI_API_KEY
+
+litellm_settings:
+  drop_params: true
+  success_callback: ["langfuse"]
+  failure_callback: ["langfuse"]
+  num_retries: 2
+  request_timeout: 600
+  # Open WebUI / Dify 等のクライアントからの metadata を Langfuse trace に転送
+  langfuse_default_tags:
+    - "caller_name"
+    - "user_api_key_alias"
+    - "user_api_key_user_id"
+    - "user_api_key_team_alias"
+    - "semantic-similarity"
+    - "proxy_base_url"
+
+router_settings:
+  # 429 (rate limit) や一時エラー時のフォールバック連鎖
+  fallbacks:
+    - claude-opus-4-6: ["claude-sonnet-4-6", "gemini-2.5-pro"]
+    - claude-sonnet-4-6: ["claude-haiku-4-5", "gemini-2.5-flash"]
+    - claude-haiku-4-5: ["gemini-2.5-flash"]
+    - gpt-4.1: ["gpt-4.1-mini", "gemini-2.5-pro"]
+    - o3: ["o4-mini", "gemini-2.5-pro"]

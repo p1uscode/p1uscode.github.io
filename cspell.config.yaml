@@ -1,0 +1,22 @@
+$schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json
+version: "0.2"
+language: en
+allowCompoundWords: true
+dictionaryDefinitions:
+  - name: project-words
+    path: ./etc/config/project-words.txt
+    addWords: true
+dictionaries:
+  - project-words
+useGitignore: true
+ignorePaths:
+  - ai/services/**
+ignoreRegExpList:
+  - /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]+/gu  # 日本語文字列をスキップ
+  - "\"[^\"]*\""       # ダブルクォートの文字列 "..."
+  - "'[^']*'"          # シングルクォートの文字列 '...'
+  - "`[^`]*`"          # バッククォートの文字列 `...`
+  - "https?:\\/\\/\\S+"  # URL
+  - "github.com/[^ ]+" # github.com の org や repo
+  - "gcr.io/[^ ]+"     # gcr.io の org や image
+  - "\\b[A-Fa-f0-9]{7,}\\b"  # コミットハッシュや長い 16 進文字列

@@ -1,0 +1,10 @@
+.DS_Store
+
+.env
+
+node_modules/
+
+# MkDocs build output
+site/
+.venv/
+__pycache__/

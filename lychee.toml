@@ -1,0 +1,5 @@
+extensions = ["md"]
+exclude_path = [
+    "node_modules",
+]
+offline = true

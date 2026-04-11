@@ -1,0 +1,26 @@
+services:
+  searxng:
+    image: docker.io/searxng/searxng:${SEARXNG_VERSION}
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - searxng_data:/etc/searxng
+    environment:
+      - SEARXNG_BASE_URL=http://searxng.home.arpa/
+      - SEARXNG_SECRET=${SEARXNG_SECRET}
+      - UWSGI_WORKERS=2
+      - UWSGI_THREADS=4
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.searxng.rule=Host(`searxng.home.arpa`)"
+      - "traefik.http.routers.searxng.entrypoints=web"
+      - "traefik.http.services.searxng.loadbalancer.server.port=8080"
+
+volumes:
+  searxng_data:
+
+networks:
+  proxy:
+    external: true

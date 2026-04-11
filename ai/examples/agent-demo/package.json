@@ -1,0 +1,25 @@
+{
+  "name": "agent-demo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LangChain tool-calling agent with Langfuse tracing",
+  "scripts": {
+    "agent-single": "tsx src/agent-single.ts",
+    "agent-chat": "tsx src/agent-chat.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "1.1.39",
+    "@langchain/openai": "1.4.4",
+    "@langfuse/langchain": "5.1.0",
+    "@langfuse/otel": "5.1.0",
+    "@opentelemetry/sdk-trace-node": "2.6.1",
+    "langchain": "1.3.1",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "25.6.0",
+    "tsx": "4.21.0",
+    "typescript": "6.0.2"
+  }
+}

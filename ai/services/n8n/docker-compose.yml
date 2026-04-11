@@ -1,0 +1,30 @@
+services:
+  n8n:
+    image: docker.io/n8nio/n8n:${N8N_VERSION}
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - n8n_data:/home/node/.n8n
+    environment:
+      - N8N_HOST=n8n.home.arpa
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://n8n.home.arpa/
+      - N8N_SECURE_COOKIE=false
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - GENERIC_TIMEZONE=Asia/Tokyo
+      - TZ=Asia/Tokyo
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.n8n.rule=Host(`n8n.home.arpa`)"
+      - "traefik.http.routers.n8n.entrypoints=web"
+      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+
+volumes:
+  n8n_data:
+
+networks:
+  proxy:
+    external: true
