@@ -104,7 +104,7 @@ LangGraph (root, 親 span)
 - iter 2 の Output: content=null, tool_calls=[calc("42+12")]
 - ... という具合
 
-**これが [theory 05 エージェントループ](../theory/06-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
+**これが [theory 06 エージェントループ](../theory/06-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
 
 ### ステップ 2-4. mitmproxy で API を見る (オプション)
 

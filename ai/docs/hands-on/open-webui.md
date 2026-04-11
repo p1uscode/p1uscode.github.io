@@ -95,7 +95,7 @@ TypeScript の async/await について簡単に説明してください。
 ```
 
 - 2 回目の「さっきの話」が通じるのは、**Open WebUI が会話履歴を毎ターン LiteLLM に送り直している**から
-- これが [theory 03 Messages と state](../theory/04-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
+- これが [theory 04 Messages と state](../theory/04-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
 - LiteLLM から見ると毎回独立したリクエストで、前回の記憶は無い
 
 ### 8. 裏で何が起きているか
