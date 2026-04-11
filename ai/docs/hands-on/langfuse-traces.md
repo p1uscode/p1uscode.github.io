@@ -46,7 +46,7 @@ Open WebUI (or 他のクライアント) から LiteLLM を叩くと、裏で La
 
 - Input: `messages` 配列がまるごと表示される (system / user / assistant / tool)
 - Output: LLM が返した `assistant` メッセージ (content or tool_calls)
-- **これが [theory 01 LLM の 1 回の呼び出し](../theory/02-llm-call.md) で書いた JSON の実体**
+- **これが [theory 02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) で書いた JSON の実体**
 
 **右側のメタデータ**
 
