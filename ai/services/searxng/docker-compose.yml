@@ -6,6 +6,8 @@ services:
       - proxy
     volumes:
       - searxng_data:/etc/searxng
+      # JSON API 等の最小上書きをリポジトリ管理された settings.yml で固定
+      - ./settings.yml:/etc/searxng/settings.yml:ro
     environment:
       - SEARXNG_BASE_URL=http://searxng.home.arpa/
       - SEARXNG_SECRET=${SEARXNG_SECRET}

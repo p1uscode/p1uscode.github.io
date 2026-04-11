@@ -64,7 +64,7 @@ export const fetchUrlTool = tool(
     description:
       "Fetch a URL and return the stripped text content (first 3000 chars).",
     schema: z.object({
-      url: z.string().url().describe("The URL to fetch."),
+      url: z.url().describe("The URL to fetch."),
     }),
   },
 );
@@ -77,7 +77,7 @@ export const wikipediaTool = tool(
     const language = lang ?? "ja";
     const url = `https://${language}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
     const res = await fetch(url, {
-      headers: { "User-Agent": "homelab-agent-demo/0.0.0" },
+      headers: { "User-Agent": "p1uscode-agent-demo/0.0.0" },
     });
     if (res.status === 404) return `not found: ${title} (${language})`;
     if (!res.ok) return `error: HTTP ${res.status}`;
@@ -217,11 +217,16 @@ export const TOOLS: Record<string, any> = {
 
 /**
  * 環境変数 `AGENT_TOOLS` (カンマ区切り) でツール選択。
- * 未指定時は全ツール。不明なツール名は警告のうえ無視。
+ *   - 未設定 (env var 自体なし) → 全ツール
+ *   - 空文字列 `AGENT_TOOLS=""` → ツール 0 個 (LLM 単独モード)
+ *   - `"search,now"` など → 指定ツールのみ
+ * 不明なツール名は警告のうえ無視。
  */
 export function selectTools() {
-  const raw = (process.env.AGENT_TOOLS ?? "").trim();
-  if (!raw) return Object.values(TOOLS);
+  const env = process.env.AGENT_TOOLS;
+  if (env === undefined) return Object.values(TOOLS);
+  const raw = env.trim();
+  if (!raw) return [];
   const requested = raw
     .split(",")
     .map((s) => s.trim())

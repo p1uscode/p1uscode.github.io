@@ -1,6 +1,6 @@
 # マルチモーダルと他のモデル
 
-ここまでは「LLM = テキスト in / テキスト out」で話を進めてきた。現実には AI モデルは**画像・音声・動画・ベクトル**等様々なモダリティを扱っている。この章では主要な「他のモデル」を整理し、本リポジトリの 00-14 章の知識が**そのまま応用できる**ことを示す。
+ここまでは「LLM = テキスト in / テキスト out」で話を進めてきた。現実には AI モデルは**画像・音声・動画・ベクトル**等様々なモダリティを扱っている。この章では主要な「他のモデル」を整理し、本リポジトリの 01-15 章の知識が**そのまま応用できる**ことを示す。
 
 ## モダリティの一覧
 
@@ -8,8 +8,8 @@
 
 | カテゴリ | 入力 | 出力 | 例 |
 |---|---|---|---|
-| **LLM** | テキスト | テキスト | GPT-4 / Claude / Gemini (テキストモード) |
-| **VLM** (Vision-Language Model) | 画像 + テキスト | テキスト | GPT-4o / Claude Opus 4 / Gemini 2.5 |
+| **LLM** | テキスト | テキスト | GPT-5.4 / Claude / Gemini (テキストモード) |
+| **VLM** (Vision-Language Model) | 画像 + テキスト | テキスト | GPT-5.4 / Claude Opus 4.6 / Gemini 2.5 |
 | **ASR** (Automatic Speech Recognition) | 音声 | テキスト | Whisper / Deepgram / ElevenLabs STT |
 | **TTS** (Text-to-Speech) | テキスト | 音声 | ElevenLabs / OpenAI TTS / Google TTS |
 | **画像生成** | テキスト (±画像) | 画像 | DALL-E 3 / Midjourney / Stable Diffusion / Flux |
@@ -17,7 +17,7 @@
 | **埋め込みモデル** | テキスト / 画像 / 音声 | ベクトル | text-embedding-3 / CLIP / Voyage |
 | **音声生成 (音楽)** | テキスト | 音楽 | Suno / Udio / MusicGen |
 | **3D 生成** | テキスト / 画像 | 3D モデル | Meshy / Tripo |
-| **Omni-modal** | 任意 | 任意 | GPT-4o / Gemini 2.5 / Claude Opus 4 |
+| **Omni-modal** | 任意 | 任意 | GPT-5.4 / Gemini 2.5 / Claude Opus 4.6 |
 
 近年は**単一モデルが複数モダリティを扱う**方向に進んでいる (omni-modal)。以下、主要なものを個別に見る。
 
@@ -94,14 +94,14 @@ export const transcribeTool = tool(
 テキスト → 音声合成。代表的な SaaS:
 
 - **ElevenLabs**: 高品質・多言語・声のクローニング
-- **OpenAI TTS**: GPT-4o 内蔵 / API
+- **OpenAI TTS**: GPT-5.4 内蔵 / API
 - **Google Cloud TTS / Azure Speech**: 企業向け
 
 こちらも tool として wrap。エージェントが応答の一部を音声で返したい場合に使う。
 
 ### リアルタイム音声対話
 
-omni-modal LLM (GPT-4o / Gemini Live) はテキストを介さず直接音声入出力をサポート。WebSocket 経由で streaming:
+omni-modal LLM (GPT-5.4 / Gemini Live) はテキストを介さず直接音声入出力をサポート。WebSocket 経由で streaming:
 
 ```
 マイク入力 (音声) → LLM → 音声出力 (直接)
@@ -168,7 +168,7 @@ Stable Diffusion や Flux は M 系 Mac / GPU で動かせる。ComfyUI / Automa
 
 ## 埋め込みモデル (再訪)
 
-[第 8 章 埋め込み](08-embeddings.md) で扱った。text-embedding-3 / BGE / CLIP 等。
+[第 9 章 埋め込み](09-embeddings.md) で扱った。text-embedding-3 / BGE / CLIP 等。
 
 - **text embedding**: 文字列 → ベクトル
 - **multimodal embedding (CLIP / SigLIP 等)**: 画像とテキストを**同じ空間に埋め込む** → 画像検索がテキストクエリで可能
@@ -194,7 +194,7 @@ CLIP の応用例:
                                     - DALL-E / Flux (image gen)
                                     - Runway (video gen)
                                     - CLIP (multimodal search)
-                                    - search / calc / fetch (第 4 章)
+                                    - search / calc / fetch (第 5 章)
                                             │
                                             ▼
                                         結果
@@ -250,7 +250,7 @@ CLIP の応用例:
 - 現代の AI モデルは **LLM / VLM / ASR / TTS / 画像生成 / 動画生成 / 埋め込み** 等多様
 - **VLM** は LLM の自然な拡張。`messages.content` が配列化される以外は同じ
 - **ASR / TTS / 画像 / 動画生成** はエージェントから**tool として**扱うのが基本
-- **omni-modal モデル** (GPT-4o / Gemini / Claude Opus 4) は単一モデルで複数モダリティを扱う。リアルタイム音声対話も可能
+- **omni-modal モデル** (GPT-5.4 / Gemini / Claude Opus 4.6) は単一モデルで複数モダリティを扱う。リアルタイム音声対話も可能
 - **「エージェント = コアモデル + ツール + state」という骨格はどのモダリティでも同じ**
-- 章 00-14 で学んだ知識は全てそのまま他モダリティに応用できる
+- 章 01-15 で学んだ知識は全てそのまま他モダリティに応用できる
 - 画像生成 / 動画生成は GPU 依存なのでローカル実行はホスト直インストール (Ollama と同じ理由、[setup/ollama.md](../setup/ollama.md))

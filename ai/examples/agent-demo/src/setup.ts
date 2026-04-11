@@ -28,21 +28,13 @@ const tracerProvider = new NodeTracerProvider({
 tracerProvider.register();
 
 // ────────────────────────────────────────────────────────────────────
-// 2. 環境変数でバックエンド / モデルを選択
-//   - AGENT_BACKEND: "litellm" (default) or "ollama"
-//   - AGENT_MODEL: backend のデフォルトを上書き
-//   - LLM_BASE_URL: プリセットを無視して直接指定
-//   - AGENT_TOOLS: カンマ区切りでツール選択 (未指定=全ツール)
+// 2. 環境変数でモデルを選択 (バックエンドは常に LiteLLM)
+//   - LLM_BASE_URL: LiteLLM エンドポイントを上書きしたいとき
+//   - AGENT_MODEL: `claude-sonnet-4-6` / `gpt-5.4` / `ollama/qwen3.5:9b` 等
 // ────────────────────────────────────────────────────────────────────
-const BACKEND = (process.env.AGENT_BACKEND ?? "litellm").toLowerCase();
-
-const backendDefaults =
-  BACKEND === "ollama"
-    ? { baseUrl: "http://localhost:11434/v1", model: "llama3.1:8b" }
-    : { baseUrl: "http://litellm.home.arpa/v1", model: "claude-sonnet-4-6" };
-
-const LLM_BASE_URL = process.env.LLM_BASE_URL ?? backendDefaults.baseUrl;
-const MODEL = process.env.AGENT_MODEL ?? backendDefaults.model;
+const LLM_BASE_URL =
+  process.env.LLM_BASE_URL ?? "http://litellm.home.arpa/v1";
+const MODEL = process.env.AGENT_MODEL ?? "ollama/qwen3.5:9b";
 
 // ────────────────────────────────────────────────────────────────────
 // 3. LLM + tools + agent
@@ -50,7 +42,7 @@ const MODEL = process.env.AGENT_MODEL ?? backendDefaults.model;
 const llm = new ChatOpenAI({
   model: MODEL,
   temperature: 0,
-  apiKey: "sk-none", // LiteLLM/Ollama はキー強制なし
+  apiKey: "sk-none", // LiteLLM はキー強制なし
   configuration: { baseURL: LLM_BASE_URL },
 });
 
@@ -91,12 +83,10 @@ export function createAgentInstance(mode: "single-shot" | "interactive") {
 // 4. 共通ヘルパ
 // ────────────────────────────────────────────────────────────────────
 
-/** 起動バナーを出す (backend / model / 有効ツール一覧を表示) */
+/** 起動バナーを出す (model / 有効ツール一覧を表示) */
 export function printBanner(name: string): void {
   console.log(
-    `[${name}] backend=${BACKEND} model=${MODEL} tools=[${tools
-      .map((t) => t.name)
-      .join(", ")}]`,
+    `[${name}] model=${MODEL} tools=[${tools.map((t) => t.name).join(", ")}]`,
   );
 }
 

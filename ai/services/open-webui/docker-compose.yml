@@ -7,8 +7,8 @@ services:
     env_file:
       - ../../.env
     environment:
-      # Ollama
-      - ENABLE_OLLAMA_API=true
+      # Ollama は LiteLLM 経由で `ollama/*` として叩くので直接統合は無効化
+      - ENABLE_OLLAMA_API=false
 
       # OpenAI compatible API (LiteLLM)
       - ENABLE_OPENAI_API=true
@@ -23,8 +23,6 @@ services:
       # デフォルトモデルパラメータ（thinking off）
       - DEFAULT_MODEL_PARAMS={"thinking":false}
 
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     volumes:
       - open-webui:/app/backend/data
     labels:

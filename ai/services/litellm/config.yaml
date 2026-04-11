@@ -1,28 +1,51 @@
 model_list:
+  # Ollama (host-side, reached via host.docker.internal)
+  # wildcard で pull 済みの任意モデルを `ollama/<tag>` として呼び出せる
+  # 例: `ollama/qwen3.5:9b`, `ollama/llama3.3:70b`
+  - model_name: "ollama/qwen3.5:35b"
+    litellm_params:
+      model: "ollama_chat/qwen3.5:35b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/qwen3.5:9b"
+    litellm_params:
+      model: "ollama_chat/qwen3.5:9b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/qwen3.5:0.8b"
+    litellm_params:
+      model: "ollama_chat/qwen3.5:0.8b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/gemma4:31b"
+    litellm_params:
+      model: "ollama_chat/gemma4:31b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/gemma4:e4b"
+    litellm_params:
+      model: "ollama_chat/gemma4:e4b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/*"
+    litellm_params:
+      model: "ollama_chat/*"
+      api_base: os.environ/OLLAMA_BASE_URL
+
   # OpenAI
-  - model_name: gpt-4.1
+  - model_name: gpt-5.4
     litellm_params:
-      model: openai/gpt-4.1
+      model: openai/gpt-5.4
       api_key: os.environ/OPENAI_API_KEY
 
-  - model_name: gpt-4.1-mini
+  - model_name: gpt-5.4-mini
     litellm_params:
-      model: openai/gpt-4.1-mini
+      model: openai/gpt-5.4-mini
       api_key: os.environ/OPENAI_API_KEY
 
-  - model_name: gpt-4o
+  - model_name: gpt-5.4-nano
     litellm_params:
-      model: openai/gpt-4o
-      api_key: os.environ/OPENAI_API_KEY
-
-  - model_name: o3
-    litellm_params:
-      model: openai/o3
-      api_key: os.environ/OPENAI_API_KEY
-
-  - model_name: o4-mini
-    litellm_params:
-      model: openai/o4-mini
+      model: openai/gpt-5.4-nano
       api_key: os.environ/OPENAI_API_KEY
 
   # Anthropic
@@ -78,10 +101,12 @@ litellm_settings:
     - "proxy_base_url"
 
 router_settings:
-  # 429 (rate limit) や一時エラー時のフォールバック連鎖
+  # 429 (rate limit) や一時エラー時のフォールバック連鎖 (同一プロバイダ内で完結させる)
   fallbacks:
-    - claude-opus-4-6: ["claude-sonnet-4-6", "gemini-2.5-pro"]
-    - claude-sonnet-4-6: ["claude-haiku-4-5", "gemini-2.5-flash"]
-    - claude-haiku-4-5: ["gemini-2.5-flash"]
-    - gpt-4.1: ["gpt-4.1-mini", "gemini-2.5-pro"]
-    - o3: ["o4-mini", "gemini-2.5-pro"]
+    - claude-opus-4-6: ["claude-sonnet-4-6", "claude-haiku-4-5"]
+    - claude-sonnet-4-6: ["claude-haiku-4-5"]
+    - gpt-5.4: ["gpt-5.4-mini", "gpt-5.4-nano"]
+    - gpt-5.4-mini: ["gpt-5.4-nano"]
+    - gemini-3.1-pro-preview: ["gemini-3-flash-preview", "gemini-2.5-pro"]
+    - gemini-3-flash-preview: ["gemini-2.5-flash"]
+    - gemini-2.5-pro: ["gemini-2.5-flash"]

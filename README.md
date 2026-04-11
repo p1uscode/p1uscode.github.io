@@ -1,14 +1,10 @@
 # p1uscode
 
-自作 lab のモノレポ兼 [p1uscode.com](https://p1uscode.com) の静的サイトソース。
-
-## Labs
-
-- [ai/](ai/docs/index.md) — ローカルで動く AI スタック (LLM / エージェント / 観測 / RAG / マルチモーダル) を題材に、仕組みを手を動かして理解するための実験環境
+- [ai/](ai/docs/index.md) — ローカルで動く AI スタック (LLM / エージェント / 観測 / RAG / マルチモーダル) を題材に、仕組みを手を動かして理解する
 
 ## サイトを手元で確認
 
-MkDocs Material で全 lab を 1 サイトにまとめている。ツールチェーンは **mise + uv** で固定管理 ([.mise.toml](.mise.toml) / [pyproject.toml](pyproject.toml))。
+MkDocs Material でサイトに自動生成。ツールチェーンは **mise + uv** で固定管理 ([.mise.toml](.mise.toml) / [pyproject.toml](pyproject.toml))。
 
 ```bash
 # 初回のみ: Python / uv をインストール + 依存同期

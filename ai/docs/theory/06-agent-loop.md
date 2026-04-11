@@ -1,6 +1,6 @@
 # エージェントループ
 
-[第 3 章 Messages と state](03-messages-state.md) で「state = messages 配列」を、[第 4 章 Tool calling](04-tool-calling.md) で「LLM が tool_calls を返し、エージェントがツールを実行して `tool` role メッセージを追加する」という 1 往復の仕組みを見た。
+[第 4 章 Messages と state](04-messages-state.md) で「state = messages 配列」を、[第 5 章 Tool calling](05-tool-calling.md) で「LLM が tool_calls を返し、エージェントがツールを実行して `tool` role メッセージを追加する」という 1 往復の仕組みを見た。
 
 この章では、その 1 往復を**何回も繰り返すことで 1 ターンが完結する**仕組み — **エージェントループ** — を見る。停止条件、失敗処理、無限ループ対策まで。
 
@@ -114,7 +114,7 @@ agent-demo は LangChain のデフォルト挙動 (エラーを `tool` メッセ
 
 LLM API 自体が失敗するパターン:
 
-- 429 rate limit → リトライ or [LiteLLM のフォールバック](../setup/agent-demo.md) で別モデルへ切り替え
+- 429 rate limit → リトライ or [LiteLLM](../setup/services.md) のフォールバック設定で別モデルへ切り替え
 - 5xx サーバエラー → リトライ
 - 400 bad request → リクエストが壊れている (messages が context window 超え、ツールスキーマ不正 等)。即座に失敗
 - 401 認証エラー → 即座に失敗
@@ -152,7 +152,7 @@ LangChain の `createAgent` は**並列実行がデフォルト**。ただしツ
 
 ## ループが進むときの messages の育ち方
 
-1 ターンの中で `messages` 配列はどう育つか、実際の形を追いかける。[第 4 章](04-tool-calling.md) の「今の時間を調べて、分に 15 をかけて」を例に:
+1 ターンの中で `messages` 配列はどう育つか、実際の形を追いかける。[第 5 章](05-tool-calling.md) の「今の時間を調べて、分に 15 をかけて」を例に:
 
 ### 初期状態
 
@@ -213,7 +213,7 @@ LangChain の `createAgent` は**並列実行がデフォルト**。ただしツ
 
 `finish_reason: "stop"` でループを抜け、最後の `assistant` メッセージをユーザに返す。**3 回の LLM 呼び出しと 2 回のツール実行が 1 ターンの中で起きた**ことになる。
 
-これは [第 3 章](03-messages-state.md) で触れた「1 ターン = 1 user から次の user まで、内部では LLM が 1 〜 N 回呼ばれる」の具体例。
+これは [第 4 章](04-messages-state.md) で触れた「1 ターン = 1 user から次の user まで、内部では LLM が 1 〜 N 回呼ばれる」の具体例。
 
 ## コストとレイテンシの帰結
 
@@ -225,10 +225,10 @@ LangChain の `createAgent` は**並列実行がデフォルト**。ただしツ
 
 だからエージェントの実装では「**いかに少ないイテレーションで終わらせるか**」がコスト / UX の両方に効いてくる。この改善には:
 
-- **道具の description を具体的に** → LLM の選択ミスが減り、無駄なツール呼び出しが起きにくい ([第 4 章](04-tool-calling.md))
+- **道具の description を具体的に** → LLM の選択ミスが減り、無駄なツール呼び出しが起きにくい ([第 5 章](05-tool-calling.md))
 - **並列 tool_calls を活用** → 3 回逐次が 1 回並列に
-- **プロンプトキャッシュ** → 2 回目以降の system prompt + 共通 context が割引 ([第 6 章](06-memory.md) L2)
-- **コンテキスト圧縮** → 古いツール結果を要約して詰める ([第 2 章](02-tokens-context.md))
+- **プロンプトキャッシュ** → 2 回目以降の system prompt + 共通 context が割引 ([第 7 章](07-memory.md) L2)
+- **コンテキスト圧縮** → 古いツール結果を要約して詰める ([第 3 章](03-tokens-context.md))
 - **モデル選択** → 難しい判断は大きいモデル、単純な tool dispatch は小さいモデル (route LLM + worker LLM 分離も可能)
 
 ## agent-demo のコードとの対応
@@ -253,7 +253,7 @@ const result = await agent.invoke(
 // ↑ この 1 行の内部でループが何回か回って、最終応答が含まれる messages が返る
 ```
 
-`result.messages` に**1 ターンで発生した全メッセージ** (user + assistant[tool_calls] + tool + assistant[tool_calls] + tool + ... + assistant[最終応答]) が入っている。Langfuse のトレースを見ると、この**各イテレーションが階層 span として可視化される**ので、どのタイミングでどのツールが呼ばれたか、各イテレーションで何トークン消費したかが後から追える。次章 ([Observability](07-observability.md)) でここを見る。
+`result.messages` に**1 ターンで発生した全メッセージ** (user + assistant[tool_calls] + tool + assistant[tool_calls] + tool + ... + assistant[最終応答]) が入っている。Langfuse のトレースを見ると、この**各イテレーションが階層 span として可視化される**ので、どのタイミングでどのツールが呼ばれたか、各イテレーションで何トークン消費したかが後から追える。次章 ([Observability](08-observability.md)) でここを見る。
 
 ### 対話モードでは 2 層のループ
 

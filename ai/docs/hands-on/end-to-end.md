@@ -1,6 +1,6 @@
 # ハンズオン 5: End-to-end で 1 つの質問を追う
 
-総仕上げ。**同じ質問**を Open WebUI 経由と agent-demo 経由の両方で投げて、システム全体でデータがどう流れたかを一望する。
+**同じ質問**を Open WebUI 経由と agent-demo 経由の両方で投げて、システム全体でデータがどう流れたかを一望する。
 
 ## ゴール
 
@@ -37,6 +37,11 @@
 - 多くのモデルは**現在時刻を知らない**ので、「私はリアルタイムの時刻にアクセスできません」等と返すはず
 - または**学習カットオフ時点や会話開始時刻を推測**して答えようとするかもしれない (不正確)
 - いずれにせよ**ツールが無い LLM 単体では正確には答えられない**
+
+ここで押さえておきたいのは、**Open WebUI 自体もツール機能を持っている**こと。
+設定でツールを有効化できる。有効にすると Open WebUI が LLM に対してツールスキーマを渡し、LLM が `tool_calls` を返すと Open WebUI 側でツールを実行し、結果を messages に追記して LLM を再度叩く — つまり **agent-demo がやっているエージェントループと同じ仕組み**が Open WebUI の内部で回る。
+
+このハンズオンではあえて**ツールを有効にしないプレーンな単発 chat** で Phase 1 を動かしている。同じことが ChatGPT / Claude.ai / Gemini の公式 Web チャットにも当てはまり、「最新情報を検索してくれた」「Python で計算してくれた」と感じる場面も**プロバイダ側がホストしているツールの tool_calls ループ**であって、仕組みとしては agent-demo と同じ。逆に言うと、どのフロントも `tools` フィールドを外して叩けば「時刻を知らない」プレーンな LLM に戻る。
 
 ### ステップ 1-3. Langfuse で確認
 
@@ -99,7 +104,7 @@ LangGraph (root, 親 span)
 - iter 2 の Output: content=null, tool_calls=[calc("42+12")]
 - ... という具合
 
-**これが [theory 05 エージェントループ](../theory/05-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
+**これが [theory 06 エージェントループ](../theory/06-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
 
 ### ステップ 2-4. mitmproxy で API を見る (オプション)
 
@@ -183,31 +188,20 @@ you> ありがとう
 このハンズオンで体感したこと:
 
 1. **LLM 単体とエージェントの実力差**はツールの有無で生じる
-2. **各レイヤ** (UI / プロキシ / LLM / ツール / 観測) が違う情報を持っている
-3. **Langfuse の階層トレース**がエージェントの挙動を一望させる
-4. **mitmproxy の生 HTTP**は LiteLLM の翻訳レイヤの出力を確認する最後の砦
-5. **デバッグの切り分け**はレイヤ別に Langfuse / mitmproxy / クライアントログを使い分ける
+2. **どのフロント (Open WebUI / ChatGPT / Claude.ai / Gemini / 自前 agent-demo) も内部はエージェントループ**。ツールを渡せば同じ仕組みで tool_calls → 実行 → 再問い合わせが回る。違いは「誰がツールをホストしているか」「ユーザがどこまで制御できるか」だけ
+3. **各レイヤ** (UI / プロキシ / LLM / ツール / 観測) が違う情報を持っている
+4. **Langfuse の階層トレース**がエージェントの挙動を一望させる
+5. **mitmproxy の生 HTTP**は LiteLLM の翻訳レイヤの出力を確認する最後の砦
+6. **デバッグの切り分け**はレイヤ別に Langfuse / mitmproxy / クライアントログを使い分ける
 
 ## 対応する座学
 
 このハンズオンは横串の総合演習なので、対応する章が多い:
 
-- [00 登場人物と責任範囲](../theory/00-overview.md) — 各アクターの役割
-- [01 LLM の 1 回の呼び出し](../theory/01-llm-call.md) — Open WebUI 単発の実体
-- [03 Messages と state](../theory/03-messages-state.md) — messages 配列が育つ様子
-- [04 Tool calling](../theory/04-tool-calling.md) — tool_calls の往復
-- [05 エージェントループ](../theory/05-agent-loop.md) — 3 iter の連鎖
-- [07 Observability](../theory/07-observability.md) — 階層 span の読み方
-- [16 エンジニアリングの 3 層](../theory/16-engineering-layers.md) — 切り分けの視点
-
-## その先
-
-ここまでで本リポジトリのハンズオン演習は一通り終わり。次の一歩としては:
-
-- **座学の章の読み込み**: 各ハンズオンで「気になった」章に戻って深掘り
-- **agent-demo の拡張**: `tools.ts` に新しいツールを足して挙動を観察 (ファイル読み取り / DB クエリ / 外部 API 等)
-- **RAG 統合**: Qdrant を使った長期記憶を入れて、agent-demo に `search_knowledge` ツールを追加 ([theory 08-09](../theory/08-embeddings.md))
-- **評価**: Langfuse の Dataset を作り、プロンプト変更前後でスコア比較 ([theory 10](../theory/10-evaluation.md))
-- **ガード**: 入力 / tool_calls / 結果 / 出力 の 4 層ガードを実装 ([theory 13](../theory/13-guards.md))
-
-自分のユースケースに一番近いところから手を入れていけばよい。
+- [01 登場人物と責任範囲](../theory/01-overview.md) — 各アクターの役割
+- [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) — Open WebUI 単発の実体
+- [04 Messages と state](../theory/04-messages-state.md) — messages 配列が育つ様子
+- [05 Tool calling](../theory/05-tool-calling.md) — tool_calls の往復
+- [06 エージェントループ](../theory/06-agent-loop.md) — 3 iter の連鎖
+- [08 Observability](../theory/08-observability.md) — 階層 span の読み方
+- [17 エンジニアリングの 3 層](../theory/17-engineering-layers.md) — 切り分けの視点

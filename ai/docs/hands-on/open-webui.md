@@ -26,8 +26,9 @@
 
 左上のモデル選択メニューをクリックすると、**LiteLLM 経由で利用可能な全モデル**が並んでいるはず:
 
+- `ollama/<tag>`
+- `gpt-5.4` / `gpt-5.4-mini` / `gpt-5.4-nano`
 - `claude-opus-4-6` / `claude-sonnet-4-6` / `claude-haiku-4-5`
-- `gpt-4.1` / `gpt-4.1-mini` / `gpt-4o` / `o3` / `o4-mini`
 - `gemini-3.1-pro-preview` / `gemini-3-flash-preview` / `gemini-2.5-pro` / `gemini-2.5-flash`
 
 この一覧は `services/litellm/config.yaml` の `model_list` がそのまま見えているだけ。Open WebUI は LiteLLM を「1 個の OpenAI 互換プロバイダ」として認識していて、その向こう側に複数モデルが並んでいる構造。
@@ -64,7 +65,7 @@
 今の時間は何時ですか?
 ```
 
-多くのモデルは「私は現在の時刻を知りません」と返すはず。これは [theory 00 登場人物](../theory/00-overview.md) の Q1 の実機確認。
+多くのモデルは「私は現在の時刻を知りません」と返すはず。これは [theory 01 overview](../theory/01-overview.md) の Q1 の実機確認。
 
 - **Open WebUI にはツールが無い**ので、LLM 単体では時刻を知らない
 - 同じ質問を agent-demo に投げると `now` ツールを呼んで答える ([ハンズオン 4](agent-demo.md) で確認)
@@ -77,13 +78,7 @@
 日本の政策金利の近年の推移と、今後の見通しについて 500 文字程度でまとめてください。
 ```
 
-応答が返ってきたら、**Open WebUI のメッセージ下部**を見ると:
-
-- 使用したモデル名
-- 応答時間
-- (モデルによっては) トークン数
-
-が表示されている。これは後で Langfuse でも同じ情報が見える ([ハンズオン 2](langfuse-traces.md))。
+後で Langfuse で送受信内容を確認する ([ハンズオン 2](langfuse-traces.md))。
 
 ### 7. マルチターンで会話を続ける
 
@@ -100,7 +95,7 @@ TypeScript の async/await について簡単に説明してください。
 ```
 
 - 2 回目の「さっきの話」が通じるのは、**Open WebUI が会話履歴を毎ターン LiteLLM に送り直している**から
-- これが [theory 03 Messages と state](../theory/03-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
+- これが [theory 04 Messages と state](../theory/04-messages-state.md) で書いた「state = クライアントが持つ messages 配列」の実体
 - LiteLLM から見ると毎回独立したリクエストで、前回の記憶は無い
 
 ### 8. 裏で何が起きているか
@@ -117,7 +112,7 @@ Open WebUI (コンテナ)
 LiteLLM (コンテナ)
   │ HTTP (provider 固有形式に変換)
   ▼
-Anthropic / OpenAI / Gemini (外部 API)
+Anthropic / OpenAI / Gemini (外部 API) / Ollama (host.docker.internal:11434)
   │ レスポンス
   ▼
 LiteLLM
@@ -136,12 +131,8 @@ Open WebUI
 
 | 観察 | 対応する座学 |
 |---|---|
-| モデル一覧が LiteLLM 経由で並ぶ | [01 LLM の 1 回の呼び出し](../theory/01-llm-call.md) "OpenAI 互換がデファクト" |
-| 同じ質問で応答スタイルが違う | [14 LLM の仕組み](../theory/14-llm-internals.md) "pretraining と instruction tuning の結果" |
-| 「今の時間は?」が答えられない | [00 登場人物と責任範囲](../theory/00-overview.md) Q1 |
-| マルチターンで文脈が繋がる | [03 Messages と state](../theory/03-messages-state.md) |
-| 長い質問ほどトークン消費が増える | [02 トークンとコンテキストウィンドウ](../theory/02-tokens-context.md) |
-
-## 次
-
-次のハンズオンでは、ここで投げた全ての会話が Langfuse に残っているので、それを可視化して読み解く: [Langfuse でトレースを読む](langfuse-traces.md)。
+| モデル一覧が LiteLLM 経由で並ぶ | [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) "OpenAI 互換がデファクト" |
+| 同じ質問で応答スタイルが違う | [15 LLM の仕組み](../theory/15-llm-internals.md) "pretraining と instruction tuning の結果" |
+| 「今の時間は?」が答えられない | [01 登場人物と責任範囲](../theory/01-overview.md) Q1 |
+| マルチターンで文脈が繋がる | [04 Messages と state](../theory/04-messages-state.md) |
+| 長い質問ほどトークン消費が増える | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |

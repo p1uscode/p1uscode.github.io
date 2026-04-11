@@ -12,7 +12,7 @@ The ai lab has 3 parallel documentation folders under `ai/docs/`:
 
 - `ai/docs/setup/` — 環境構築 / インストール / 設定リファレンス
 - `ai/docs/hands-on/` — 実際に画面や CLI を触って動作を観察する演習
-- `ai/docs/theory/` — 座学 (仕組み / 原理 / 設計) の独立資料、章番号付き (00-19)
+- `ai/docs/theory/` — 座学 (仕組み / 原理 / 設計) の独立資料、章番号付き (01-20)
 
 When writing a new page:
 
