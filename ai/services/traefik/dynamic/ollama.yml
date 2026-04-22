@@ -1,0 +1,13 @@
+http:
+  routers:
+    ollama:
+      rule: "Host(`ollama.home.arpa`)"
+      entryPoints:
+        - web
+      service: ollama
+
+  services:
+    ollama:
+      loadBalancer:
+        servers:
+          - url: "http://litellm:4000"

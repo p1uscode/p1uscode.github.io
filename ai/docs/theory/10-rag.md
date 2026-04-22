@@ -208,6 +208,16 @@ RAG でよくある失敗と対処:
 | 遅い | 検索 + LLM の合計レイテンシ | 検索を非同期 / キャッシュ / 小さいモデルで re-rank |
 | コスト高 | 大量の context を毎回 LLM に送る | プロンプトキャッシュ ([第 7 章 L2](07-memory.md)) / チャンクサイズ削減 |
 
+## RAG の評価
+
+チャンク設計 / 埋め込みモデル / re-ranker を変えたときに「検索品質が上がったか」を測るには、生成結果だけでなく **retrieval 段階そのもの**を評価する必要がある。RAG 特化の評価ライブラリが便利:
+
+- **RAGAS** — context precision / recall / faithfulness / answer relevancy を LLM-as-judge で算出。Langfuse / LangSmith と連携しやすい
+- **TruLens** — "RAG Triad" (context relevance / groundedness / answer relevance) をフレームワーク化
+- **DeepEval** — pytest ライクに RAG メトリクスを書ける
+
+どれも「質問 → 検索された context → 回答」の 3 点セットをデータとして渡すと、retrieval 品質と generation 品質を分けて点数化してくれる。詳細は [第 11 章](11-evaluation.md) と合わせて参照。
+
 ## RAG は万能薬ではない
 
 RAG で解けない問題もある:

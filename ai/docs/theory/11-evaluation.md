@@ -144,7 +144,7 @@ CI に組み込むには:
 - **コスト**: 1 回数ドル〜数十ドル規模 / 評価対象と judge 両方の課金
 - **しきい値**: スコアの単純な平均より、分布 (p10 / p50) の変化を見る方が robust
 
-OSS / SaaS で evaluation harness を提供しているものの例: **promptfoo** / **Braintrust** / **LangSmith** / **Phoenix** / **Langfuse Experiments**。
+OSS / SaaS で evaluation harness を提供しているものの例: **promptfoo** / **Braintrust** / **LangSmith** / **Phoenix** / **Langfuse Experiments**。RAG 特化で retrieval 品質 (context precision / recall / faithfulness) を測りたい場合は **RAGAS** / **TruLens** / **DeepEval** が定番で、既存 harness と組み合わせて使うことも多い。
 
 ## メトリクス設計の原則
 

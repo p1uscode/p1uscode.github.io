@@ -41,6 +41,7 @@ theme:
     - search.highlight
     - content.code.copy
     - content.action.edit
+    - navigation.footer
 
 markdown_extensions:
   - admonition
@@ -62,11 +63,20 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 
+hooks:
+  - hooks/strip_number_prefix.py
+
 plugins:
   - search:
       lang:
         - ja
         - en
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: custom
+      custom_format: "%Y/%m/%d"
+      fallback_to_build_date: true
+      enable_parallel_processing: true
   - monorepo
 
 extra:

@@ -62,6 +62,10 @@ run = "docker compose -f services/qdrant/docker-compose.yml up -d"
 description = "Start n8n (workflow automation)"
 run = "docker compose -f services/n8n/docker-compose.yml up -d"
 
+[tasks."up:homepage"]
+description = "Start homepage (service dashboard)"
+run = "docker compose -f services/homepage/docker-compose.yml up -d"
+
 [tasks.up]
 description = "Start all services"
 depends = [
@@ -73,6 +77,7 @@ depends = [
   "up:searxng",
   "up:qdrant",
   "up:n8n",
+  "up:homepage",
 ]
 
 # ── down ──────────────────────────────────────────────────────────
@@ -114,6 +119,10 @@ run = "docker compose -f services/qdrant/docker-compose.yml down"
 description = "Stop n8n"
 run = "docker compose -f services/n8n/docker-compose.yml down"
 
+[tasks."down:homepage"]
+description = "Stop homepage"
+run = "docker compose -f services/homepage/docker-compose.yml down"
+
 [tasks.down]
 description = "Stop all services"
 depends = [
@@ -125,6 +134,7 @@ depends = [
   "down:searxng",
   "down:qdrant",
   "down:n8n",
+  "down:homepage",
 ]
 
 # ── update ────────────────────────────────────────────────────────
@@ -151,6 +161,7 @@ docker compose -f services/langfuse/docker-compose.yml pull
 docker compose -f services/searxng/docker-compose.yml pull
 docker compose -f services/qdrant/docker-compose.yml pull
 docker compose -f services/n8n/docker-compose.yml pull
+docker compose -f services/homepage/docker-compose.yml pull
 """
 
 # ── agent-demo ────────────────────────────────────────────────────

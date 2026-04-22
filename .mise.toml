@@ -7,11 +7,11 @@ gh = "2.89.0"
 
 [tasks.docs-serve]
 description = "MkDocs Material のローカルサーバ起動 (http://127.0.0.1:8000)"
-run = "uv run mkdocs serve"
+run = "uv run python -m mkdocs serve"
 
 [tasks.docs-build]
 description = "MkDocs Material で静的サイトを生成 (出力: site/、--strict で warning は fail)"
-run = "uv run mkdocs build --strict"
+run = "uv run python -m mkdocs build --strict"
 
 [tasks.docs-sync]
 description = "ドキュメント用 Python 依存を uv.lock に同期"
