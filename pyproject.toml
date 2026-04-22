@@ -6,4 +6,5 @@ requires-python = ">=3.14"
 dependencies = [
     "mkdocs-material==9.7.6",
     "mkdocs-monorepo-plugin==1.1.2",
+    "mkdocs-git-revision-date-localized-plugin==1.4.5",
 ]

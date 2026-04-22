@@ -2,9 +2,22 @@ model_list:
   # Ollama (host-side, reached via host.docker.internal)
   # wildcard で pull 済みの任意モデルを `ollama/<tag>` として呼び出せる
   # 例: `ollama/qwen3.5:9b`, `ollama/llama3.3:70b`
+  - model_name: "ollama/qwen3.6:35b-a3b-q8_0"
+    litellm_params:
+      model: "ollama_chat/qwen3.6:35b-a3b-q8_0"
+      api_base: os.environ/OLLAMA_BASE_URL
+  - model_name: "ollama/qwen3.6:35b-a3b"
+    litellm_params:
+      model: "ollama_chat/qwen3.6:35b-a3b"
+      api_base: os.environ/OLLAMA_BASE_URL
   - model_name: "ollama/qwen3.5:35b"
     litellm_params:
       model: "ollama_chat/qwen3.5:35b"
+      api_base: os.environ/OLLAMA_BASE_URL
+
+  - model_name: "ollama/qwen3.5:35b-a3b-coding-nvfp4"
+    litellm_params:
+      model: "ollama_chat/qwen3.5:35b-a3b-coding-nvfp4"
       api_base: os.environ/OLLAMA_BASE_URL
 
   - model_name: "ollama/qwen3.5:9b"
@@ -84,6 +97,12 @@ model_list:
     litellm_params:
       model: gemini/gemini-2.5-flash
       api_key: os.environ/GEMINI_API_KEY
+
+general_settings:
+  pass_through_endpoints:
+    - path: "/api"
+      target: "http://host.docker.internal:11434/api"
+      include_subpath: true
 
 litellm_settings:
   drop_params: true

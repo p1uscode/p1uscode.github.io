@@ -30,7 +30,7 @@
 
 ### ステップ 1-1. Open WebUI で投げる
 
-<http://open-webui.home.arpa> を開き、モデルを `claude-sonnet-4-6` か `gemini-2.5-flash` に設定して、題材の質問をそのまま投げる。
+<http://open-webui.home.arpa> を開き、モデルを**自分の環境で使える任意のモデル** (API キーを設定したクラウドモデル、または `ollama/*` として LiteLLM に登録したローカルモデル) に設定して、題材の質問をそのまま投げる。どれでも観察ポイントは同じ。
 
 ### ステップ 1-2. 応答を観察
 

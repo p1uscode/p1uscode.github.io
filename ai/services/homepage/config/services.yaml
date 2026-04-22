@@ -1,0 +1,83 @@
+---
+- Tools:
+    - Open WebUI:
+        icon: mdi-chat-processing
+        href: http://open-webui.home.arpa
+        description: チャット UI (LiteLLM 経由)
+        server: local
+        container: open-webui-open-webui-1
+
+    - Dify:
+        icon: mdi-robot
+        href: http://dify.home.arpa
+        description: LLM アプリビルダ
+
+    - n8n:
+        icon: mdi-sitemap
+        href: http://n8n.home.arpa
+        description: ワークフロー自動化
+        server: local
+        container: n8n-n8n-1
+
+    - Qdrant:
+        icon: mdi-database-search
+        href: http://qdrant.home.arpa
+        description: ベクトル DB
+        server: local
+        container: qdrant-qdrant-1
+
+    - SearXNG:
+        icon: mdi-search-web
+        href: http://searxng.home.arpa
+        description: メタ検索 (agent tool)
+        server: local
+        container: searxng-searxng-1
+
+- Observability:
+    - Langfuse:
+        icon: mdi-chart-timeline-variant
+        href: http://langfuse.home.arpa
+        description: LLM トレース / 評価
+        server: local
+        container: langfuse-langfuse-web-1
+
+    - mitmproxy:
+        icon: mdi-magnify-scan
+        href: http://mitmproxy.home.arpa
+        description: 上流 API トラフィック検査
+        server: local
+        container: litellm-mitmproxy-1
+
+- AI Core:
+    - LiteLLM:
+        icon: mdi-api
+        href: http://litellm.home.arpa
+        description: OpenAI 互換 LLM プロキシ
+        server: local
+        container: litellm-litellm-1
+
+    - Ollama (host):
+        icon: mdi-brain
+        href: http://ollama.home.arpa
+        description: ホスト側 Metal GPU で推論
+        widget:
+          type: customapi
+          url: http://ollama.home.arpa/api/ps
+          refreshInterval: 10000
+          display: list
+          mappings:
+            - field:
+                models: 0.name
+              label: running
+            - field:
+                models: 0.size_vram
+              label: vram
+              format: bytes
+
+- Infra:
+    - Traefik:
+        icon: mdi-router-network
+        href: http://traefik.home.arpa
+        description: リバースプロキシ
+        server: local
+        container: traefik-traefik-1

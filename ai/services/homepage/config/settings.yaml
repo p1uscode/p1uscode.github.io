@@ -1,0 +1,17 @@
+title: home
+theme: dark
+color: slate
+headerStyle: clean
+layout:
+  Tools:
+    style: row
+    columns: 4
+  Observability:
+    style: row
+    columns: 4
+  AI Core:
+    style: row
+    columns: 4
+  Infra:
+    style: row
+    columns: 4
