@@ -29,7 +29,7 @@ OpenAI 互換 API (= Chat Completions) の最小リクエストは、**モデル
 }
 ```
 
-- `model`: どのモデルに解かせるか。LiteLLM 経由なら `claude-sonnet-4-6` / `gemini-2.5-flash` / `gpt-5.4` 等、`services/litellm/config.yaml` で定義したエイリアスがそのまま使える
+- `model`: どのモデルに解かせるか。LiteLLM 経由なら `claude-sonnet-4-6` / `gemini-3.1-flash-preview` / `gpt-5.5` 等、`services/litellm/config.yaml` で定義したエイリアスがそのまま使える
 - `messages`: 会話履歴。配列の**順序**が会話の順序を表し、LLM はこれを上から順に読んで「次に何を言うべきか」を推論する
 
 ### role の意味
@@ -105,11 +105,13 @@ OpenAI 互換 API (= Chat Completions) の最小リクエストは、**モデル
 └─────────┘   └───────────┘   └──────────┘
 ```
 
-本リポジトリ構成では、エージェントは LiteLLM だけを相手にしていればよく、LiteLLM 側で「claude-sonnet-4-6 はここ、gemini-2.5-flash はここ」と `services/litellm/config.yaml` に書いたルーティングに従って実際のプロバイダに翻訳される。
+本リポジトリ構成では、エージェントは LiteLLM だけを相手にしていればよく、LiteLLM 側で「claude-sonnet-4-6 はここ、gemini-3.1-flash-preview はここ」と `services/litellm/config.yaml` に書いたルーティングに従って実際のプロバイダに翻訳される。
 
 ## curl で実際に 1 発叩く
 
 LiteLLM が動いている前提で、ホストから直接 (整形に `jq` を使う。mise で入れている):
+
+なお curl の例では、**API トークン (課金設定) が無くても手軽に試せるよう、無料枠で動く `gemini-2.5-flash`** を使っている。集約レイヤ (LiteLLM) 経由でトークンを設定して最新モデルを使う場合は、`model` を `gemini-3.1-flash-preview` などに差し替えればよい (curl 側は `model` 名を変えるだけ)。
 
 ```sh
 curl -s http://litellm.home.arpa/v1/chat/completions \
@@ -189,7 +191,7 @@ curl -s http://litellm.home.arpa/v1/chat/completions \
                                             完全に忘れている
 ```
 
-会話が続いているように見えるのは、**エージェント側が過去のメッセージを毎回再送しているから**であって、LLM が「前回」を記憶しているわけではない。これが第 7 章 [記憶の多層モデル](07-memory.md) の L3 「コンテキスト注入」の正体。
+会話が続いているように見えるのは、**エージェント側が過去のメッセージを毎回再送しているから**であって、LLM が「前回」を記憶しているわけではない。これが第 8 章 [記憶の多層モデル](08-memory.md) の L3 「コンテキスト注入」の正体。
 
 裏を返すと、LLM に何かを伝えたければ **この 1 回のリクエストに全部詰め込むしかない**。
 
@@ -223,7 +225,7 @@ const llm = new ChatOpenAI({
 
 - 単価はモデルごとに大きく違う (Gemini Flash は 1 M トークンあたり数十セント、Claude Opus は 10 ドル超えることも)
 - 同じ質問でも `system` prompt や履歴が長ければ `prompt_tokens` が増えて課金増
-- 推論モデル (GPT-5.4 reasoning 等) は内部の思考トークンも `completion_tokens` に乗ってくるので、見た目の応答が短くても請求は大きい
+- 推論モデル (GPT-5.5 reasoning 等) は内部の思考トークンも `completion_tokens` に乗ってくるので、見た目の応答が短くても請求は大きい
 
 レイテンシも同じように、モデル / トークン量 / 推論深度で数 100 ms から数十秒まで幅がある。**エージェントは 1 ターンの応答のために LLM を 3〜10 回呼ぶことが普通**なので、1 呼び出しの速度 × ラウンド数が体感レイテンシになる。
 
@@ -231,7 +233,7 @@ const llm = new ChatOpenAI({
 
 同じ質問を何度か投げると、**毎回少しずつ違う応答**が返ってくることに気付くはず (本リポジトリの agent-demo はデフォルト `temperature: 0` なので揺れは小さいが、完全には固定されない)。
 
-これは LLM が確率分布に基づいて次のトークンをサンプルしているため。この「どのくらい揺らすか」を制御するのがサンプリングパラメータで、第 12 章で詳しく扱う。
+これは LLM が確率分布に基づいて次のトークンをサンプルしているため。この「どのくらい揺らすか」を制御するのがサンプリングパラメータで、第 13 章で詳しく扱う。
 
 また、`messages` に何も文脈を与えず `"今日は何日?"` とだけ聞いてみると、モデルによって:
 

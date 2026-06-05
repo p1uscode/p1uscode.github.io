@@ -71,7 +71,7 @@ mitmweb の UI が開く。左側にリクエスト一覧、右側に選択し�
 
 ```json
 {
-  "model": "gpt-5.4",
+  "model": "gpt-5.5",
   "messages": [
     { "role": "system", "content": "..." },
     { "role": "user",   "content": "富士山の高さは?" }
@@ -147,7 +147,7 @@ LiteLLM はこれを**OpenAI 互換形式に変換**してクライアントに�
 
 Open WebUI から応答を受け取ると、実際には SSE (Server-Sent Events) でストリーミングされていることが多い。mitmweb では Response の中身が**チャンクごとに分かれて表示**される (`data: {...}` の繰り返し)。各チャンクには 1 〜 数トークンずつの差分が入っている。
 
-これが LLM が「1 トークンずつ生成している」実機証拠。[theory 15 LLM の仕組み](../theory/15-llm-internals.md) の「次トークン予測の連鎖」を目で見ている状態。
+これが LLM が「1 トークンずつ生成している」実機証拠。[theory 16 LLM の仕組み](../theory/16-llm-internals.md) の「次トークン予測の連鎖」を目で見ている状態。
 
 ## 何に使えるか
 
@@ -173,4 +173,4 @@ mitmproxy は普段使いのツールではないが、以下の場面で活躍�
 | プロバイダごとに request/response 形式が違う | [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) "API は会社ごとに違う" |
 | LiteLLM が形式を翻訳している | 同上 |
 | usage のフィールド名が違う | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |
-| SSE チャンクで 1 トークンずつ来る | [15 LLM の仕組み](../theory/15-llm-internals.md) "次トークン予測の連鎖" |
+| SSE チャンクで 1 トークンずつ来る | [16 LLM の仕組み](../theory/16-llm-internals.md) "次トークン予測の連鎖" |

@@ -20,8 +20,16 @@ services:
       # 環境変数をUIの設定より常に優先する
       - ENABLE_PERSISTENT_CONFIG=false
 
-      # デフォルトモデルパラメータ（thinking off）
-      - DEFAULT_MODEL_PARAMS={"thinking":false}
+      # デフォルトモデルパラメータ（thinking off / streaming on）
+      - DEFAULT_MODEL_PARAMS={"thinking":false,"stream_response":true}
+
+      # 自動サブリクエスト（タイトル/タグ/フォローアップ/補完/検索クエリ生成）を無効化
+      - ENABLE_TITLE_GENERATION=false
+      - ENABLE_TAGS_GENERATION=false
+      - ENABLE_FOLLOW_UP_GENERATION=false
+      - ENABLE_AUTOCOMPLETE_GENERATION=false
+      - ENABLE_RETRIEVAL_QUERY_GENERATION=false
+      - ENABLE_SEARCH_QUERY_GENERATION=false
 
     volumes:
       - open-webui:/app/backend/data

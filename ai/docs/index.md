@@ -55,18 +55,19 @@ LLM エージェントの内部を下の層から順に理解するための独�
 - [03 トークンとコンテキストウィンドウ](theory/03-tokens-context.md) — BPE トークン化、日本語/英語の差、context window 上限、超過との付き合い方
 - [04 Messages と state](theory/04-messages-state.md) — messages 配列 = エージェントの state、永続化の選択肢、Langfuse session は state ではないこと
 - [05 Tool calling (function calling)](theory/05-tool-calling.md) — LLM は決めるだけ / 叩くのはエージェント、tools スキーマと `tool_calls` の往復、道具の品質
-- [06 エージェントループ](theory/06-agent-loop.md) — 1 ターン = N イテレーション、停止条件、並列 tool_calls、無限ループ対策
-- [07 記憶の多層モデル](theory/07-memory.md) — プロンプトキャッシュ / 履歴再送 / 外部ストレージ等の「記憶」の実体
-- [08 Observability / tracing](theory/08-observability.md) — trace と span、Langfuse 3 層実装、sessionId / userId / tags の使い分け、観測 ≠ 記憶
-- [09 埋め込みと近傍検索](theory/09-embeddings.md) — embedding、cosine / dot product、ANN (HNSW 等)、ベクトル DB
-- [10 RAG の基本](theory/10-rag.md) — Retrieval → Augmentation → Generation、チャンク設計、ハイブリッド、re-rank、agentic RAG
-- [11 評価 (LLM-as-a-judge)](theory/11-evaluation.md) — 4 つの評価軸、データセット作成、回帰テスト、Langfuse 実務フロー
-- [12 サンプリングパラメータ](theory/12-sampling.md) — temperature / top_p / seed / max_tokens、決定性と多様性
-- [13 system prompt の設計](theory/13-system-prompt.md) — 基本 5 原則、典型パターン、アンチパターン、改善ワークフロー
-- [14 ガードとプロンプトインジェクション](theory/14-guards.md) — インジェクションの種類、ガード 4 層、信頼境界、根本的な限界
-- [15 LLM の仕組み (ざっくり)](theory/15-llm-internals.md) — 次トークン予測、transformer、3 段階学習、hallucination の原因、推論モデル
-- [16 マルチモーダルと他のモデル](theory/16-multimodal.md) — VLM / ASR / TTS / 画像生成 / 動画生成 / omni-modal、エージェント骨格の普遍性
-- [17 エンジニアリングの 3 層](theory/17-engineering-layers.md) — プロンプト / コンテキスト / ハーネス エンジニアリング、既存章との対応、agent-demo マッピング
-- [18 ローカル LLM とクラウド LLM](theory/18-local-vs-cloud-llm.md) — 2 つの選択肢、量子化とハード要件、評価軸、ハイブリッドの実務パターン
-- [19 主要 AI ツールの全体像](theory/19-ai-tools-overview.md) — LLM ベンダー純正 × サードパーティ × 配信形態、評価軸
-- [20 全体の締めくくり](theory/20-closing.md) — 01-20 章の振り返りと、これから先の進み方
+- [06 MCP (Model Context Protocol)](theory/06-mcp.md) — ツール・データ・プロンプトを LLM に繋ぐ共通インターフェース、4 プリミティブ、3 層アーキテクチャ、メリットとリスク
+- [07 エージェントループ](theory/07-agent-loop.md) — 1 ターン = N イテレーション、停止条件、並列 tool_calls、無限ループ対策
+- [08 記憶の多層モデル](theory/08-memory.md) — モデル重み / キャッシュ / 履歴再送 / md ファイル / 外部ストレージの 5 層
+- [09 Observability / tracing](theory/09-observability.md) — trace と span、Langfuse 3 層実装、sessionId / userId / tags の使い分け、観測 ≠ 記憶
+- [10 埋め込みと近傍検索](theory/10-embeddings.md) — embedding、cosine / dot product、ANN (HNSW 等)、ベクトル DB
+- [11 RAG の基本](theory/11-rag.md) — Retrieval → Augmentation → Generation、チャンク設計、ハイブリッド、re-rank、agentic RAG
+- [12 評価 (LLM-as-a-judge)](theory/12-evaluation.md) — 4 つの評価軸、データセット作成、回帰テスト、Langfuse 実務フロー
+- [13 サンプリングパラメータ](theory/13-sampling.md) — temperature / top_p / seed / max_tokens、決定性と多様性
+- [14 system prompt の設計](theory/14-system-prompt.md) — 基本 5 原則、典型パターン、アンチパターン、改善ワークフロー
+- [15 ガードとプロンプトインジェクション](theory/15-guards.md) — インジェクションの種類、ガード 4 層、信頼境界、根本的な限界
+- [16 LLM の仕組み (ざっくり)](theory/16-llm-internals.md) — 次トークン予測、transformer、3 段階学習、hallucination の原因、推論モデル
+- [17 マルチモーダルと他のモデル](theory/17-multimodal.md) — VLM / ASR / TTS / 画像生成 / 動画生成 / omni-modal、エージェント骨格の普遍性
+- [18 エンジニアリングの 3 層](theory/18-engineering-layers.md) — プロンプト / コンテキスト / ハーネス エンジニアリング、既存章との対応、agent-demo マッピング
+- [19 ローカル LLM とクラウド LLM](theory/19-local-vs-cloud-llm.md) — 2 つの選択肢、量子化とハード要件、評価軸、ハイブリッドの実務パターン
+- [20 主要 AI ツールの全体像](theory/20-ai-tools-overview.md) — LLM ベンダー純正 × サードパーティ × 配信形態、評価軸
+- [21 全体の締めくくり](theory/21-closing.md) — 01-21 章の振り返りと、これから先の進み方

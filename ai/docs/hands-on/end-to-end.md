@@ -104,7 +104,7 @@ LangGraph (root, 親 span)
 - iter 2 の Output: content=null, tool_calls=[calc("42+12")]
 - ... という具合
 
-**これが [theory 06 エージェントループ](../theory/06-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
+**これが [theory 07 エージェントループ](../theory/07-agent-loop.md) の messages 配列が育っていく様子の実機確認**。
 
 ### ステップ 2-4. mitmproxy で API を見る (オプション)
 
@@ -164,7 +164,7 @@ AGENT_TOOLS=now mise run agent-single -- "今の UTC 時刻を調べて、その
 ### バリエーション B: モデルを変える
 
 ```sh
-AGENT_MODEL=gemini-2.5-flash mise run agent-single -- "..."
+AGENT_MODEL=gemini-3.1-flash-preview mise run agent-single -- "..."
 ```
 
 Gemini Flash は速いがレスポンスの言い回しが違う。Langfuse で model フィールドが変わっていることを確認。
@@ -202,6 +202,6 @@ you> ありがとう
 - [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) — Open WebUI 単発の実体
 - [04 Messages と state](../theory/04-messages-state.md) — messages 配列が育つ様子
 - [05 Tool calling](../theory/05-tool-calling.md) — tool_calls の往復
-- [06 エージェントループ](../theory/06-agent-loop.md) — 3 iter の連鎖
-- [08 Observability](../theory/08-observability.md) — 階層 span の読み方
-- [17 エンジニアリングの 3 層](../theory/17-engineering-layers.md) — 切り分けの視点
+- [07 エージェントループ](../theory/07-agent-loop.md) — 3 iter の連鎖
+- [09 Observability](../theory/09-observability.md) — 階層 span の読み方
+- [18 エンジニアリングの 3 層](../theory/18-engineering-layers.md) — 切り分けの視点

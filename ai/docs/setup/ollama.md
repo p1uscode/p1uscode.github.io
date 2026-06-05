@@ -4,6 +4,17 @@
 
 ai lab では Ollama を **LiteLLM 経由** (`ollama/*` wildcard ルート) で全クライアント共通に叩く。LiteLLM コンテナが `host.docker.internal:11434` に抜けられるよう `OLLAMA_BASE_URL=http://host.docker.internal:11434` が `.env` に入っている。**コンテナではなくホストに直接インストール**する。
 
+## 接続経路 (`ollama.home.arpa` と `ollama-traced.home.arpa`)
+
+Ollama API には Traefik 経由で 2 通りのホスト名でアクセスできる:
+
+| ホスト名 | 経路 | Langfuse トレース | 主な用途 |
+|---|---|---|---|
+| `ollama.home.arpa` | Traefik → 直接ホスト Ollama (`:11434`) | ❌ 残らない | Ollama 公式 SDK・homepage の `/api/ps` ウィジェット・LiteLLM をスキップしたい比較検証 |
+| `ollama-traced.home.arpa` | Traefik → LiteLLM (`pass_through_endpoints`) → ホスト Ollama | ✅ 残る | native API (`/api/chat` 等) のままで Langfuse に痕跡を残したいクライアント |
+
+ふだんアプリケーションから呼ぶときは **`http://litellm.home.arpa/v1` (OpenAI 互換)** が本筋。`ollama.home.arpa` / `ollama-traced.home.arpa` は **Ollama ネイティブ API しか喋れないクライアント** (Continue.dev、homepage ウィジェット等) のためのルート。
+
 ## なぜホストに入れるのか
 
 - **Apple Silicon の Metal GPU はコンテナから見えない**。Docker Desktop は軽量 Linux VM 上で動くため、macOS の Metal / MPS バックエンドにアクセスできず、コンテナ内で Ollama を動かすと CPU 推論になって実用的な速度が出ない。

@@ -1,0 +1,478 @@
+/* ===== p1uscode deck — minimal technical ===== */
+:root {
+  --bg: #0a0a0a;
+  --bg-alt: #121211;
+  --bg-card: #16161a;
+  --fg: #e8e8e6;
+  --fg-dim: #8a8a86;
+  --fg-faint: #4a4a47;
+  --rule: #2a2a27;
+  --accent: oklch(0.78 0.14 180); /* mint */
+  --accent-dim: oklch(0.55 0.10 180);
+  --warn: oklch(0.80 0.14 60);   /* amber */
+  --danger: oklch(0.72 0.18 25); /* coral */
+  --ok: oklch(0.80 0.14 150);    /* green */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica,
+    "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
+}
+
+deck-stage section {
+  background: var(--bg);
+  color: var(--fg);
+  padding: 100px 100px 80px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* --------- type --------- */
+.mono {
+  font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+  font-feature-settings: normal;
+}
+.kicker {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 24px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 0 0 28px;
+}
+.title {
+  font-size: 72px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 24px;
+  text-wrap: pretty;
+}
+.title-big {
+  font-size: 108px;
+  line-height: 1.0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.subtitle {
+  font-size: 44px;
+  line-height: 1.35;
+  color: var(--fg-dim);
+  font-weight: 400;
+  margin: 0 0 52px;
+  text-wrap: pretty;
+}
+.body {
+  font-size: 34px;
+  line-height: 1.5;
+  color: var(--fg);
+  margin: 0 0 28px;
+  max-width: 1500px;
+  text-wrap: pretty;
+}
+.small {
+  font-size: 28px;
+  line-height: 1.55;
+  color: var(--fg-dim);
+}
+.en {
+  color: var(--fg-dim);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.78em;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+.accent { color: var(--accent); }
+.warn { color: var(--warn); }
+.danger { color: var(--danger); }
+.ok { color: var(--ok); }
+.dim { color: var(--fg-dim); }
+.faint { color: var(--fg-faint); }
+
+/* --------- layout helpers --------- */
+.frame-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 22px;
+  color: var(--fg-faint);
+  letter-spacing: 0.05em;
+  margin-bottom: 60px;
+}
+.frame-header .tag { color: var(--accent); }
+.row { display: flex; gap: 48px; }
+.col { display: flex; flex-direction: column; }
+.grow { flex: 1; }
+.center { justify-content: center; align-items: flex-start; }
+.vcenter { justify-content: center; }
+.hcenter { align-items: center; text-align: center; }
+.push-down { margin-top: auto; }
+
+/* --------- code blocks --------- */
+.code {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 32px 36px;
+  font-size: 24px;
+  line-height: 1.55;
+  color: var(--fg);
+  white-space: pre;
+  overflow: hidden;
+}
+.code.big { font-size: 26px; }
+.code.small { font-size: 22px; }
+.code .c-key { color: var(--accent); }
+.code .c-str { color: oklch(0.85 0.11 90); }
+.code .c-num { color: oklch(0.78 0.14 60); }
+.code .c-com { color: #8a8a86; font-style: italic; }
+.code .c-rem { color: var(--fg-faint); }
+.code .c-role { color: var(--accent); font-weight: 600; }
+.code .c-hi { background: rgba(130, 230, 210, 0.10); display: inline-block; padding: 0 4px; border-radius: 3px; }
+
+/* --------- tables --------- */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 28px;
+}
+.tbl th, .tbl td {
+  text-align: left;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.tbl th {
+  font-weight: 500;
+  color: var(--fg-dim);
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--accent-dim);
+}
+.tbl td .mono { font-size: 0.92em; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl .ok { color: var(--ok); font-family: "JetBrains Mono", monospace; }
+.tbl .no { color: var(--danger); font-family: "JetBrains Mono", monospace; }
+.tbl .mid { color: var(--warn); font-family: "JetBrains Mono", monospace; }
+
+/* --------- cards (for grid layouts) --------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 32px 36px;
+}
+.card .label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.card h3 { font-size: 34px; margin: 0 0 16px; font-weight: 600; }
+.card p { font-size: 26px; line-height: 1.5; color: var(--fg-dim); margin: 0; }
+
+/* --------- big number --------- */
+.bignum {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 240px;
+  line-height: 0.9;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+}
+
+/* --------- section divider slide --------- */
+.section-slide {
+  justify-content: center;
+}
+.section-slide .section-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 34px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 32px;
+}
+.section-slide .section-title {
+  font-size: 120px;
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  max-width: 1600px;
+}
+.section-slide .section-sub {
+  margin-top: 44px;
+  font-size: 36px;
+  color: var(--fg-dim);
+  max-width: 1400px;
+  line-height: 1.45;
+}
+
+/* --------- ascii diagram --------- */
+.ascii {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--fg);
+  white-space: pre;
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 32px 36px;
+}
+
+/* --------- list --------- */
+ul.clean, ol.clean {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul.clean li, ol.clean li {
+  font-size: 32px;
+  line-height: 1.5;
+  padding: 14px 0;
+  color: var(--fg);
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--rule);
+}
+ul.clean li:last-child, ol.clean li:last-child { border-bottom: none; }
+ul.clean li .num {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--accent);
+  font-size: 24px;
+  min-width: 48px;
+}
+ul.clean.compact li, ol.clean.compact li {
+  font-size: 24px;
+  line-height: 1.4;
+  padding: 10px 0;
+  gap: 14px;
+}
+ul.clean.compact li .num { font-size: 18px; min-width: 32px; }
+
+/* --------- quote --------- */
+.quote {
+  font-size: 54px;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--fg);
+  max-width: 1500px;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+.quote::before { content: "❝ "; color: var(--accent); }
+.quote-attr {
+  margin-top: 36px;
+  font-family: "JetBrains Mono", monospace;
+  color: var(--fg-dim);
+  font-size: 24px;
+  letter-spacing: 0.1em;
+}
+
+/* --------- progress dots for agenda --------- */
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 64px;
+}
+.agenda-grid .item {
+  display: flex;
+  gap: 24px;
+  font-size: 30px;
+  line-height: 1.4;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.agenda-grid .item .n {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--accent);
+  font-size: 22px;
+  min-width: 56px;
+}
+.agenda-grid .item .t .en { display: block; font-size: 18px; margin-top: 4px; }
+
+/* --------- title slide --------- */
+.title-slide {
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 800px 400px at 20% 20%, rgba(130, 230, 210, 0.06), transparent 60%),
+    var(--bg);
+}
+.title-slide .brand {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 24px;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  margin-bottom: 48px;
+}
+.title-slide .eye {
+  font-size: 128px;
+  line-height: 1.0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  max-width: 1600px;
+  margin: 0;
+}
+.title-slide .eye-sub {
+  margin-top: 40px;
+  font-size: 40px;
+  color: var(--fg-dim);
+  max-width: 1400px;
+  line-height: 1.35;
+}
+.title-slide .meta {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  color: var(--fg-faint);
+  letter-spacing: 0.08em;
+  padding-top: 64px;
+  border-top: 1px solid var(--rule);
+}
+
+/* --------- terminal blocks --------- */
+.term {
+  background: #050505;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 20px 28px 24px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  line-height: 1.55;
+  color: var(--fg);
+  white-space: pre;
+  overflow: hidden;
+}
+.term .bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  margin-left: -4px;
+}
+.term .bar span {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--fg-faint);
+}
+.term .prompt { color: var(--accent); }
+.term .out { color: var(--fg-dim); }
+
+/* --------- 2-col with rule --------- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  flex: 1;
+}
+.split > div { display: flex; flex-direction: column; }
+.split .vs {
+  position: relative;
+}
+.split-head {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* --------- callout / box --------- */
+.box {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 28px 32px;
+  background: var(--bg-card);
+}
+.box.accent { border-color: var(--accent-dim); }
+
+/* --------- 3-col numbered --------- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  flex: 1;
+}
+.step {
+  border-left: 2px solid var(--accent-dim);
+  padding: 0 0 0 28px;
+}
+.step .stepn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.step h4 {
+  font-size: 34px;
+  margin: 0 0 16px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.step p { font-size: 24px; color: var(--fg-dim); margin: 0; line-height: 1.5; }
+
+/* --------- chips --------- */
+.chip {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 20px;
+  padding: 4px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--fg-dim);
+  margin: 2px 4px 2px 0;
+}
+.chip.on {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+  background: rgba(130, 230, 210, 0.06);
+}
+
+/* --------- arrow / direction --------- */
+.arrow {
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  margin: 0 16px;
+}
+
+/* --------- deck-stage slide footer (bottom row: extras left, page right) --------- */
+.slide-footer {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 18px;
+  color: var(--fg-faint);
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  z-index: 5;
+}
+/* Page number is always the first span — push it to the right edge. */
+.slide-footer > span:first-child { margin-left: auto; order: 2; }
+.slide-footer > span:not(:first-child) { order: 1; }
+.slide-footer .url { color: var(--accent); }
+.slide-footer .mono.dim { font-size: 16px; }
