@@ -3,6 +3,7 @@ docs_dir: docs
 
 nav:
   - Overview: index.md
+  - スライド: slides.md
   - Setup:
     - setup/README.md
     - サービス構成: setup/services.md
