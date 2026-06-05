@@ -65,12 +65,6 @@ hooks:
   - hooks/strip_number_prefix.py
   - hooks/copy_slides.py
 
-validation:
-  links:
-    # /ai/slides/*.html are static decks copied in by copy_slides.py, not
-    # MkDocs pages — don't fail --strict on these intentional absolute links.
-    absolute_links: ignore
-
 plugins:
   - search:
       lang:
