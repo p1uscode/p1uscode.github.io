@@ -28,10 +28,10 @@ jobs:
           experimental: true
 
       - name: Sync Python dependencies
-        run: uv sync --frozen
+        run: mise run docs-sync
 
       - name: Build site
-        run: uv run python -m mkdocs build --strict
+        run: mise run docs-build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

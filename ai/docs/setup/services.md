@@ -4,23 +4,23 @@
 
 ```
 .
-├── .env                    # 全サービス共通の設定 (バージョン・APIキー等、gitignore済)
-├── .env.example            # .env のテンプレート
-├── .mise.toml              # mise タスク定義 (.env を読み込み)
-├── services/               # docker compose で動かすインフラ群
-│   ├── traefik/                # リバースプロキシ
+├── .env                                  # 全サービス共通の設定 (バージョン・APIキー等、gitignore済)
+├── .env.example                          # .env のテンプレート
+├── .mise.toml                            # mise タスク定義 (.env を読み込み)
+├── services/                             # docker compose で動かすインフラ群
+│   ├── traefik/                          # リバースプロキシ
 │   ├── dify/
 │   │   ├── docker-compose.override.yaml  # difyのローカルカスタマイズ
-│   │   └── dify/                          # git clone (管理外)
-│   ├── litellm/                # LiteLLM プロキシ + mitmproxy
-│   ├── open-webui/             # Open WebUI
-│   ├── langfuse/               # Langfuse (LLM オブザーバビリティ)
-│   ├── searxng/                # SearXNG (メタ検索エンジン)
-│   ├── qdrant/                 # Qdrant (ベクトル DB)
-│   └── n8n/                    # n8n (ワークフロー自動化)
-├── examples/               # 学習用サンプルコード
-│   └── agent-demo/             # LangChain ツールコールエージェント (Node/TS)
-└── docs/                   # ドキュメント群 (setup / hands-on / theory)
+│   │   └── dify/                         # git clone (管理外)
+│   ├── litellm/                          # LiteLLM プロキシ + mitmproxy
+│   ├── open-webui/                       # Open WebUI
+│   ├── langfuse/                         # Langfuse (LLM オブザーバビリティ)
+│   ├── searxng/                          # SearXNG (メタ検索エンジン)
+│   ├── qdrant/                           # Qdrant (ベクトル DB)
+│   └── n8n/                              # n8n (ワークフロー自動化)
+├── examples/                             # 学習用サンプルコード
+│   └── agent-demo/                       # LangChain ツールコールエージェント (Node/TS)
+└── docs/                                 # ドキュメント群 (setup / hands-on / theory)
 ```
 
 バージョン・API キー・ホスト名などの設定値はすべてルートの `.env` に集約し、各サービスの `docker-compose.yml` は `env_file: ../../.env` で参照する。
@@ -47,9 +47,9 @@
 
 | プロバイダ | モデル | 必要な環境変数 |
 |---|---|---|
-| OpenAI | gpt-5.4, gpt-5.4-mini, gpt-5.4-nano | `OPENAI_API_KEY` |
-| Anthropic | claude-opus-4-6, claude-sonnet-4-6, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
-| Google | gemini-3.1-pro-preview, gemini-3-flash-preview, gemini-2.5-pro, gemini-2.5-flash | `GEMINI_API_KEY` |
+| OpenAI | gpt-5.5, gpt-5.4-mini, gpt-5.4-nano | `OPENAI_API_KEY` |
+| Anthropic | claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5 | `ANTHROPIC_API_KEY` |
+| Google | gemini-3.1-pro-preview, gemini-3.1-flash-preview, gemini-3.1-flash-lite-preview, gemini-2.5-pro, gemini-2.5-flash | `GEMINI_API_KEY` |
 | Ollama (ローカル) | `ollama/<tag>` (例: `ollama/qwen3.5:9b`) — pull 済みの任意モデル | 不要 ([setup/ollama](ollama.md)) |
 
 モデル一覧とルーティング設定は [`ai/services/litellm/config.yaml`](https://github.com/p1uscode/p1uscode.github.io/blob/main/ai/services/litellm/config.yaml) を参照。追加 / 削除する場合はこのファイルを編集して `mise run down:litellm && mise run up:litellm`。

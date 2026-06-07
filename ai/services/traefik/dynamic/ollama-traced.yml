@@ -1,0 +1,13 @@
+http:
+  routers:
+    ollama-traced:
+      rule: "Host(`ollama-traced.home.arpa`)"
+      entryPoints:
+        - web
+      service: ollama-traced
+
+  services:
+    ollama-traced:
+      loadBalancer:
+        servers:
+          - url: "http://litellm:4000"

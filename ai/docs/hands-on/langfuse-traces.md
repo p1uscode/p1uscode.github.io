@@ -100,7 +100,7 @@ Traces タブで上部のフィルタ条件に `tags` contains `agent-demo` を�
 
 ### 9. デバッグ視点で眺める
 
-本番でエージェントが変な応答をしたとき、Langfuse でやることは [theory 08 Observability](../theory/08-observability.md) のデバッグ手順そのもの:
+本番でエージェントが変な応答をしたとき、Langfuse でやることは [theory 09 Observability](../theory/09-observability.md) のデバッグ手順そのもの:
 
 1. 該当時間帯 + ユーザ / セッション で絞り込む
 2. 木を開いて duration の長いところ / エラーのあるところを見つける
@@ -117,5 +117,5 @@ Traces タブで上部のフィルタ条件に `tags` contains `agent-demo` を�
 | `messages` 配列が Input に丸ごと入っている | [04 Messages と state](../theory/04-messages-state.md) |
 | モデルごとにトークン数が違う | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |
 | Langfuse のセッションはタグであって state ではない | [04 Messages と state](../theory/04-messages-state.md) の Langfuse session セクション |
-| trace / span の親子構造 | [08 Observability](../theory/08-observability.md) |
-| sessionId / userId / tags の使い分け | [08 Observability](../theory/08-observability.md) |
+| trace / span の親子構造 | [09 Observability](../theory/09-observability.md) |
+| sessionId / userId / tags の使い分け | [09 Observability](../theory/09-observability.md) |

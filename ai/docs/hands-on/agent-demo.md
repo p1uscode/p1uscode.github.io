@@ -75,7 +75,7 @@ mise run agent:ci      # npm ci (lockfile からの再現可能インストー�
 
 | 変数 | 例 | 用途 |
 |---|---|---|
-| `AGENT_MODEL` | `ollama/qwen3.5:9b` (default) / `claude-sonnet-4-6` / `gpt-5.4` | LiteLLM に登録されたモデル名 |
+| `AGENT_MODEL` | `ollama/qwen3.5:9b` (default) / `claude-sonnet-4-6` / `gpt-5.5` | LiteLLM に登録されたモデル名 |
 | `AGENT_TOOLS` | `search,now,calc` | 有効ツール (未指定=全ツール) |
 | `LLM_BASE_URL` | `http://...` | LiteLLM エンドポイントを上書きしたいとき |
 | `SEARXNG_BASE_URL` | `http://searxng.home.arpa` | SearXNG エンドポイント |
@@ -126,7 +126,7 @@ mise run agent-single -- "富士山の高さは?"
 - ツール 7 個を LLM に宣言している
 - **LLM がツールを呼ぶか呼ばないかはモデル次第**:
 - Langfuse でトレースを見ると (後述)、同じ質問でもモデルごとに木の形が全く違うことが確認できる
-- [theory 06 エージェントループ](../theory/06-agent-loop.md) の「LLM が毎ターン tool を呼ぶかどうか決めている」という部分の実機観察
+- [theory 07 エージェントループ](../theory/07-agent-loop.md) の「LLM が毎ターン tool を呼ぶかどうか決めている」という部分の実機観察
 
 ### 3. 明確にツールが必要な質問
 
@@ -152,7 +152,7 @@ mise run agent-single -- "今の時間を調べて、その分に 15 をかけ�
 
 - 応答内で「現在時刻 XX:XX、分 YY × 15 = ZZZ」のような形で返る
 - 裏で `now` → `calc` の 2 ツール連鎖が起きている (Langfuse で確認する)
-- [theory 06 エージェントループ](../theory/06-agent-loop.md) の具体例。ツールがあると実行時情報を取ってきて、さらにその結果を使って次の行動を決められる
+- [theory 07 エージェントループ](../theory/07-agent-loop.md) の具体例。ツールがあると実行時情報を取ってきて、さらにその結果を使って次の行動を決められる
 
 ### 4. Langfuse でトレースを見る
 
@@ -167,7 +167,7 @@ mise run agent-single -- "今の時間を調べて、その分に 15 をかけ�
   - `calc` (tool 実行、結果数値)
   - `ChatOpenAI` (iteration 3: 最終応答生成)
 
-のような木構造で span が並ぶ。これが [theory 08 Observability](../theory/08-observability.md) の**階層 span の実体**。
+のような木構造で span が並ぶ。これが [theory 09 Observability](../theory/09-observability.md) の**階層 span の実体**。
 
 各 span をクリックすると、Input/Output に messages 配列や tool 引数が入っているのが見える。
 
@@ -179,7 +179,7 @@ mise run agent-single -- "今の時間を調べて、その分に 15 をかけ�
 mise run agent-single -- "TypeScript と Python の Wikipedia 記事の要約を両方教えて"
 ```
 
-Langfuse のトレースで 2 つの `wikipedia` tool 実行が**並列**に走っているか確認できる (timestamps を見ると同じタイミングで start している)。[theory 06](../theory/06-agent-loop.md) の「並列ツール呼び出し」の節。
+Langfuse のトレースで 2 つの `wikipedia` tool 実行が**並列**に走っているか確認できる (timestamps を見ると同じタイミングで start している)。[theory 07](../theory/07-agent-loop.md) の「並列ツール呼び出し」の節。
 
 ### 6. ツール絞り込み
 
@@ -205,7 +205,7 @@ AGENT_TOOLS=search,now mise run agent-single -- "今の時間を調べて、そ�
 AGENT_MODEL=ollama/qwen3.5:35b mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
 
 # クラウドの Gemini
-AGENT_MODEL=gemini-2.5-flash mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
+AGENT_MODEL=gemini-3.1-flash-preview mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
 
 # クラウドの Claude
 AGENT_MODEL=claude-sonnet-4-6 mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
@@ -223,7 +223,7 @@ AGENT_MODEL=claude-sonnet-4-6 mise run agent-single -- "今の時間を調べて
   - `wikipedia` は Wikipedia REST API に問い合わせる
   - これらのツールは LLM 本体とは別に**外部へ通信する**
 - 完全オフラインにしたいなら、ローカル LLM に加えて `AGENT_TOOLS=now,calc,random_int` のように**外部通信しないツールだけ**に絞る必要がある
-- [theory 18 ローカル vs クラウド](../theory/18-local-vs-cloud-llm.md) の実機対比
+- [theory 19 ローカル vs クラウド](../theory/19-local-vs-cloud-llm.md) の実機対比
 
 ### 8. 対話モードを試す
 
@@ -240,7 +240,7 @@ readline のプロンプト (`you>`) が出るので、以下を順に入力:
 **観察**:
 
 - LLM は曖昧すぎると判断して**追加質問を返す**はず ("どのカテゴリのおすすめ? 映画? 本?")
-- **ツールを呼んでいない**こと ([theory 13 system prompt](../theory/13-system-prompt.md) の think-before-act)
+- **ツールを呼んでいない**こと ([theory 14 system prompt](../theory/14-system-prompt.md) の think-before-act)
 
 続けて:
 
@@ -262,7 +262,7 @@ LLM が `end_chat` ツールを呼んで会話が自動終了するはず:
 [chat ended by agent: conversation complete]
 ```
 
-これが [theory 06 エージェントループ](../theory/06-agent-loop.md) の「明示的な終了シグナル」の実機。
+これが [theory 07 エージェントループ](../theory/07-agent-loop.md) の「明示的な終了シグナル」の実機。
 
 ### 9. 対話モードのトレースを Sessions で見る
 
@@ -272,7 +272,7 @@ Langfuse の **Sessions** タブを開くと、今の対話が 1 つの session 
 
 ### 10. `tags=agent-demo` で絞り込み
 
-Traces タブに戻って、フィルタに `tags` contains `agent-demo` を入れると、このハンズオンで作ったトレースだけが残る。本番では tag で環境 / 実験 / バージョンを切り分けるのと同じ要領 ([theory 08](../theory/08-observability.md))。
+Traces タブに戻って、フィルタに `tags` contains `agent-demo` を入れると、このハンズオンで作ったトレースだけが残る。本番では tag で環境 / 実験 / バージョンを切り分けるのと同じ要領 ([theory 09](../theory/09-observability.md))。
 
 ## 観察できた現象の対応章
 
@@ -280,9 +280,9 @@ Traces タブに戻って、フィルタに `tags` contains `agent-demo` を入�
 |---|---|
 | ツール一覧の宣言 (tools スキーマ) | [05 Tool calling](../theory/05-tool-calling.md) |
 | LLM がツールを呼ぶ判断 | [05 Tool calling](../theory/05-tool-calling.md) "決めるのは LLM" |
-| 階層 span (LangGraph → ChatOpenAI → tool) | [08 Observability](../theory/08-observability.md) |
-| 並列 tool_calls | [06 エージェントループ](../theory/06-agent-loop.md) |
+| 階層 span (LangGraph → ChatOpenAI → tool) | [09 Observability](../theory/09-observability.md) |
+| 並列 tool_calls | [07 エージェントループ](../theory/07-agent-loop.md) |
 | ツール絞り込みと LLM 能力の関係 | [05 Tool calling](../theory/05-tool-calling.md) "道具の品質" |
-| 対話モードでの追加質問 (ツール呼ばず) | [13 system prompt の設計](../theory/13-system-prompt.md) |
-| end_chat による自動終了 | [06 エージェントループ](../theory/06-agent-loop.md) "明示的な終了シグナル" |
-| Sessions タブでの対話まとめ | [04 Messages と state](../theory/04-messages-state.md), [08 Observability](../theory/08-observability.md) |
+| 対話モードでの追加質問 (ツール呼ばず) | [14 system prompt の設計](../theory/14-system-prompt.md) |
+| end_chat による自動終了 | [07 エージェントループ](../theory/07-agent-loop.md) "明示的な終了シグナル" |
+| Sessions タブでの対話まとめ | [04 Messages と state](../theory/04-messages-state.md), [09 Observability](../theory/09-observability.md) |

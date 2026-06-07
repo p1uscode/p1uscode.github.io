@@ -9,5 +9,6 @@ http:
   services:
     ollama:
       loadBalancer:
+        passHostHeader: false
         servers:
-          - url: "http://litellm:4000"
+          - url: "http://host.docker.internal:11434"

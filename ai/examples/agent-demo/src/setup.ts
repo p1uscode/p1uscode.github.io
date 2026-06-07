@@ -30,7 +30,7 @@ tracerProvider.register();
 // ────────────────────────────────────────────────────────────────────
 // 2. 環境変数でモデルを選択 (バックエンドは常に LiteLLM)
 //   - LLM_BASE_URL: LiteLLM エンドポイントを上書きしたいとき
-//   - AGENT_MODEL: `claude-sonnet-4-6` / `gpt-5.4` / `ollama/qwen3.5:9b` 等
+//   - AGENT_MODEL: `claude-sonnet-4-6` / `gpt-5.5` / `ollama/qwen3.5:9b` 等
 // ────────────────────────────────────────────────────────────────────
 const LLM_BASE_URL =
   process.env.LLM_BASE_URL ?? "http://litellm.home.arpa/v1";

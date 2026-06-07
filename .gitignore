@@ -9,3 +9,10 @@ node_modules/
 site/
 .venv/
 __pycache__/
+
+# Slide decks with personal photos / survey links — kept local only,
+# shared via the hand-distributed zip. Only the main deck goes public.
+ai/slides/opening/
+ai/slides/closing/
+ai/slides/README.md
+ai-agent-introduction.zip

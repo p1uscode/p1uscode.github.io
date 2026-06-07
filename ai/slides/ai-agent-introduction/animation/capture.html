@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>p1uscode — AI Agent Digest Animation (capture mode)</title>
+
+<script>
+  // Deterministic capture mode: replace requestAnimationFrame with a queue
+  // that only fires when the host calls window.__driveFrame(ts). This lets
+  // Playwright step through the Stage timeline one frame at a time, with
+  // exact timestamps, instead of relying on real-time playback.
+  (() => {
+    const pending = [];
+    let nextId = 1;
+    const cancelled = new Set();
+
+    window.requestAnimationFrame = (cb) => {
+      const id = nextId++;
+      pending.push({ id, cb });
+      return id;
+    };
+    window.cancelAnimationFrame = (id) => {
+      cancelled.add(id);
+    };
+
+    window.__driveFrame = (ts) => {
+      const batch = pending.splice(0);
+      for (const { id, cb } of batch) {
+        if (cancelled.has(id)) continue;
+        try { cb(ts); } catch (e) { console.error('rAF cb threw:', e); }
+      }
+    };
+
+    // Force any localStorage-persisted playhead to 0 so capture always
+    // starts at the beginning regardless of prior browsing.
+    try { localStorage.setItem('digest-anim:t', '0'); } catch {}
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #0a0a0a; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    color: #e8e8e6;
+  }
+  #root { position: absolute; inset: 0; }
+  /* Hide the Stage playback bar — keep only the canvas for clean capture. */
+  [data-anim-root] > div > div:not(:first-child) { display: none !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="animations.jsx"></script>
+<script type="text/babel" src="tokens.jsx"></script>
+<script type="text/babel" src="scenes-a.jsx"></script>
+<script type="text/babel" src="scenes-b.jsx"></script>
+<script type="text/babel" src="digest.jsx"></script>
+
+</body>
+</html>

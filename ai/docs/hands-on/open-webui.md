@@ -27,15 +27,15 @@
 左上のモデル選択メニューをクリックすると、**LiteLLM 経由で利用可能な全モデル**が並んでいるはず:
 
 - `ollama/<tag>`
-- `gpt-5.4` / `gpt-5.4-mini` / `gpt-5.4-nano`
-- `claude-opus-4-6` / `claude-sonnet-4-6` / `claude-haiku-4-5`
-- `gemini-3.1-pro-preview` / `gemini-3-flash-preview` / `gemini-2.5-pro` / `gemini-2.5-flash`
+- `gpt-5.5` / `gpt-5.4-mini` / `gpt-5.4-nano`
+- `claude-opus-4-8` / `claude-sonnet-4-6` / `claude-haiku-4-5`
+- `gemini-3.1-pro-preview` / `gemini-3.1-flash-preview` / `gemini-3.1-flash-lite-preview` / `gemini-2.5-pro` / `gemini-2.5-flash`
 
 この一覧は `services/litellm/config.yaml` の `model_list` がそのまま見えているだけ。Open WebUI は LiteLLM を「1 個の OpenAI 互換プロバイダ」として認識していて、その向こう側に複数モデルが並んでいる構造。
 
 ### 3. 簡単な質問を投げる
 
-モデルを `gemini-2.5-flash` にして、次を投げてみる:
+モデルを `gemini-3.1-flash-preview` にして、次を投げてみる:
 
 ```
 富士山の高さは?
@@ -132,7 +132,7 @@ Open WebUI
 | 観察 | 対応する座学 |
 |---|---|
 | モデル一覧が LiteLLM 経由で並ぶ | [02 LLM の 1 回の呼び出し](../theory/02-llm-call.md) "OpenAI 互換がデファクト" |
-| 同じ質問で応答スタイルが違う | [15 LLM の仕組み](../theory/15-llm-internals.md) "pretraining と instruction tuning の結果" |
+| 同じ質問で応答スタイルが違う | [16 LLM の仕組み](../theory/16-llm-internals.md) "pretraining と instruction tuning の結果" |
 | 「今の時間は?」が答えられない | [01 登場人物と責任範囲](../theory/01-overview.md) Q1 |
 | マルチターンで文脈が繋がる | [04 Messages と state](../theory/04-messages-state.md) |
 | 長い質問ほどトークン消費が増える | [03 トークンとコンテキストウィンドウ](../theory/03-tokens-context.md) |

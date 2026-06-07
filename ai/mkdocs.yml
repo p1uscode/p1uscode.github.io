@@ -3,6 +3,7 @@ docs_dir: docs
 
 nav:
   - Overview: index.md
+  - スライド: slides.md
   - Setup:
     - setup/README.md
     - サービス構成: setup/services.md
@@ -24,18 +25,19 @@ nav:
     - 03 トークンとコンテキストウィンドウ: theory/03-tokens-context.md
     - 04 Messages と state: theory/04-messages-state.md
     - 05 Tool calling: theory/05-tool-calling.md
-    - 06 エージェントループ: theory/06-agent-loop.md
-    - 07 記憶の多層モデル: theory/07-memory.md
-    - 08 Observability / tracing: theory/08-observability.md
-    - 09 埋め込みと近傍検索: theory/09-embeddings.md
-    - 10 RAG の基本: theory/10-rag.md
-    - 11 評価 (LLM-as-a-judge): theory/11-evaluation.md
-    - 12 サンプリングパラメータ: theory/12-sampling.md
-    - 13 system prompt の設計: theory/13-system-prompt.md
-    - 14 ガードとプロンプトインジェクション: theory/14-guards.md
-    - 15 LLM の仕組み: theory/15-llm-internals.md
-    - 16 マルチモーダルと他のモデル: theory/16-multimodal.md
-    - 17 エンジニアリングの 3 層: theory/17-engineering-layers.md
-    - 18 ローカル LLM とクラウド LLM: theory/18-local-vs-cloud-llm.md
-    - 19 主要 AI ツールの全体像: theory/19-ai-tools-overview.md
-    - 20 全体の締めくくり: theory/20-closing.md
+    - 06 MCP (Model Context Protocol): theory/06-mcp.md
+    - 07 エージェントループ: theory/07-agent-loop.md
+    - 08 記憶の多層モデル: theory/08-memory.md
+    - 09 Observability / tracing: theory/09-observability.md
+    - 10 埋め込みと近傍検索: theory/10-embeddings.md
+    - 11 RAG の基本: theory/11-rag.md
+    - 12 評価 (LLM-as-a-judge): theory/12-evaluation.md
+    - 13 サンプリングパラメータ: theory/13-sampling.md
+    - 14 system prompt の設計: theory/14-system-prompt.md
+    - 15 ガードとプロンプトインジェクション: theory/15-guards.md
+    - 16 LLM の仕組み: theory/16-llm-internals.md
+    - 17 マルチモーダルと他のモデル: theory/17-multimodal.md
+    - 18 エンジニアリングの 3 層: theory/18-engineering-layers.md
+    - 19 ローカル LLM とクラウド LLM: theory/19-local-vs-cloud-llm.md
+    - 20 主要 AI ツールの全体像: theory/20-ai-tools-overview.md
+    - 21 全体の締めくくり: theory/21-closing.md
