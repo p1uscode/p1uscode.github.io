@@ -7,8 +7,7 @@
     "prepare": "husky",
     "lint:md": "markdownlint-cli2",
     "spell": "cspell --no-progress --no-summary --dot '**/*.md'",
-    "check": "npm run lint:md && npm run spell",
-    "render-animation": "node scripts/render-animation.mjs"
+    "check": "npm run lint:md && npm run spell"
   },
   "devDependencies": {
     "cspell": "8.19.4",
