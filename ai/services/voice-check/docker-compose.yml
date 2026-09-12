@@ -1,0 +1,25 @@
+services:
+  voice-check:
+    image: nginx:1.27-alpine
+    restart: always
+    networks:
+      - proxy
+    ports:
+      # 別PCのブラウザから http://<host-ip>:8080/ で直アクセスできるよう公開
+      - "${VOICE_CHECK_PORT:-8080}:80"
+    extra_hosts:
+      # ホスト常駐の whisper-server (:9000) へ抜けるため
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./html:/usr/share/nginx/html:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.voice-check.rule=Host(`voice-check.home.arpa`)"
+      - "traefik.http.routers.voice-check.entrypoints=web"
+      - "traefik.http.services.voice-check.loadbalancer.server.port=80"
+
+networks:
+  proxy:
+    external: true

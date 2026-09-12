@@ -74,6 +74,26 @@
               label: vram
               format: bytes
 
+- Voice:
+    - Whisper (host):
+        icon: mdi-microphone-message
+        href: http://whisper.home.arpa
+        description: 音声認識 STT (ホスト Metal GPU)
+
+    - VoiceVox:
+        icon: mdi-account-voice
+        href: http://voicevox.home.arpa
+        description: 音声合成 TTS
+        server: local
+        container: voicevox-voicevox-1
+
+    - Voice Check:
+        icon: mdi-check-decagram
+        href: http://voice-check.home.arpa
+        description: TTS/STT 疎通確認 UI
+        server: local
+        container: voice-check-voice-check-1
+
 - Infra:
     - Traefik:
         icon: mdi-router-network

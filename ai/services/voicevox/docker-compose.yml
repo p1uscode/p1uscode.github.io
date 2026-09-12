@@ -1,0 +1,28 @@
+services:
+  voicevox:
+    # M4 Pro は arm64 native を明示ピン。amd64 を掴むと QEMU で推論が遅くなる
+    image: voicevox/voicevox_engine:cpu-arm64-${VOICEVOX_VERSION}
+    restart: always
+    volumes:
+      # ユーザー辞書(TODO の読みなど)の保存先。マウントしないとコンテナ再作成で消える
+      - ./user-dict:/home/user/.local/share/voicevox-engine
+    networks:
+      - proxy
+    # デフォルト CMD (gosu user /opt/voicevox_engine/run --host 0.0.0.0) を踏襲しつつ、
+    # バッチ合成で全コアを食い切らないようスレッド数を絞って他サービスと共存させる
+    command: ["gosu", "user", "/opt/voicevox_engine/run", "--host", "0.0.0.0", "--cpu_num_threads", "4"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:50021/version"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.voicevox.rule=Host(`voicevox.home.arpa`)"
+      - "traefik.http.routers.voicevox.entrypoints=web"
+      - "traefik.http.services.voicevox.loadbalancer.server.port=50021"
+
+networks:
+  proxy:
+    external: true

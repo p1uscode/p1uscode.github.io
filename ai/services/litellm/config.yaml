@@ -1,35 +1,57 @@
 model_list:
   # Ollama
+  # think / keep_alive は Ollama native の root パラメータ。LiteLLM はそのまま
+  # 転送するので、ここで既定を持たせるとクライアント側の実装に依らず
+  # 「思考トークン無効 + モデル常駐 24h」で揃う (リクエストで上書き可能)
+  - model_name: "ollama/qwen3.8:27b-mlx"
+    litellm_params:
+      model: "ollama_chat/qwen3.8:27b-mlx"
+      api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
+
   - model_name: "ollama/qwen3.6:35b-a3b-q8_0"
     litellm_params:
       model: "ollama_chat/qwen3.6:35b-a3b-q8_0"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
   - model_name: "ollama/qwen3.6:35b-a3b"
     litellm_params:
       model: "ollama_chat/qwen3.6:35b-a3b"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
   - model_name: "ollama/qwen3.6:27b"
     litellm_params:
       model: "ollama_chat/qwen3.6:27b"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
 
   - model_name: "ollama/qwen3.5:9b"
     litellm_params:
       model: "ollama_chat/qwen3.5:9b"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
   - model_name: "ollama/qwen3.5:0.8b"
     litellm_params:
       model: "ollama_chat/qwen3.5:0.8b"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
 
   - model_name: "ollama/gemma4:31b"
     litellm_params:
       model: "ollama_chat/gemma4:31b"
       api_base: os.environ/OLLAMA_BASE_URL
+      keep_alive: "24h"
   - model_name: "ollama/gemma4:e4b"
     litellm_params:
       model: "ollama_chat/gemma4:e4b"
       api_base: os.environ/OLLAMA_BASE_URL
+      keep_alive: "24h"
 
   # wildcard で pull 済みの任意モデルを `ollama/<tag>` として呼び出せる
   # 例: `ollama/qwen3.5:9b`, `ollama/llama3.3:70b`
@@ -37,6 +59,8 @@ model_list:
     litellm_params:
       model: "ollama_chat/*"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
+      keep_alive: "24h"
 
   # OpenAI
   - model_name: gpt-5.5

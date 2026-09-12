@@ -44,9 +44,11 @@ blocklist
 chainguard
 chatcmpl
 checkpointer
+coremltools
 deepseek
 dnsmasq
 generativelanguage
+ggml
 groundedness
 healthchecks
 jailcase

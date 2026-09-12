@@ -11,6 +11,8 @@ nav:
     - mise: setup/mise.md
     - DNS: setup/dns.md
     - Ollama: setup/ollama.md
+    - Whisper (STT): setup/whisper.md
+    - VoiceVox (TTS): setup/voicevox.md
   - Hands-on:
     - hands-on/README.md
     - 1. Open WebUI: hands-on/open-webui.md

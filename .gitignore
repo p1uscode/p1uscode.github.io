@@ -5,6 +5,10 @@
 
 node_modules/
 
+# Whisper (host) の ggml モデルは巨大なので追跡しない (mise run whisper:model で取得)
+ai/services/whisper/models/*.bin
+ai/services/whisper/models/*.mlmodelc/
+
 # MkDocs build output
 site/
 .venv/
@@ -14,5 +18,6 @@ __pycache__/
 # shared via the hand-distributed zip. Only the main deck goes public.
 ai/slides/opening/
 ai/slides/closing/
+ai/slides/result/
 ai/slides/README.md
 ai-agent-introduction.zip
