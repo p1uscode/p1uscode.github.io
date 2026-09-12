@@ -1,0 +1,64 @@
+http:
+  routers:
+    # /api だけ HTTP 側(:8099)へ。ルール長で ws より優先されるので priority は不要。
+    # watch の設定 API (/api/device/<hwid>) がここを通る。
+    agent-api:
+      rule: "Host(`agent.home.arpa`) && PathPrefix(`/api`)"
+      entryPoints:
+        - web
+      service: agent-http
+
+    # 残りは WebSocket(:8098)。ロボットの常時接続。
+    agent-ws:
+      rule: "Host(`agent.home.arpa`)"
+      entryPoints:
+        - web
+      service: agent-ws
+
+    # ブラウザ用の設定 UI。同じ :8099 だが Host で分ける(ws と / が衝突するため)。
+    agent-ui:
+      rule: "Host(`agent-ui.home.arpa`)"
+      entryPoints:
+        - web
+      service: agent-http
+
+    # 外向け webhook 専用の口(:8100)。UI/API とはポートで分けてある。
+    agent-webhook:
+      rule: "Host(`agent-webhook.home.arpa`)"
+      entryPoints:
+        - web
+      service: agent-webhook
+
+    # MCP ツールサーバ(:8097)。
+    agent-mcp:
+      rule: "Host(`agent-mcp.home.arpa`)"
+      entryPoints:
+        - web
+      service: agent-mcp
+
+  services:
+    # ロボットの向き先をここ一箇所に集約する。Mac(.8)から red へ移すときは
+    # この url を http://host-relay:PORT に変えるだけで、焼き直しは要らない。
+    agent-ws:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: "http://host-relay:8098"
+
+    agent-http:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: "http://host-relay:8099"
+
+    agent-webhook:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: "http://host-relay:8100"
+
+    agent-mcp:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          - url: "http://host-relay:8097"
