@@ -1,9 +1,9 @@
 [tools]
-python = "3.14.4"
+python = "3.14.7"
 uv = "0.11.6"
 node = "24.14.1"
 lychee = "0.23.0"
-gh = "2.89.0"
+gh = "2.100.0"
 
 [tasks.docs-serve]
 description = "MkDocs Material のローカルサーバ起動 (http://127.0.0.1:8000)"
