@@ -2,7 +2,7 @@
 
 > **クラウド LLM (OpenAI / Anthropic / Gemini) のみを使う場合は不要**。ローカルで LLM を走らせたいときだけ導入する。
 
-ai lab では Ollama を **LiteLLM 経由** (`ollama/*` wildcard ルート) で全クライアント共通に叩く。LiteLLM コンテナが `host.docker.internal:11434` に抜けられるよう `OLLAMA_BASE_URL=http://host.docker.internal:11434` が `.env` に入っている。**コンテナではなくホストに直接インストール**する。
+ai lab では Ollama を **LiteLLM 経由** (pull 済みモデルを明示登録) で全クライアント共通に叩く。LiteLLM コンテナが `host.docker.internal:11434` に抜けられるよう `OLLAMA_BASE_URL=http://host.docker.internal:11434` が `.env` に入っている。**コンテナではなくホストに直接インストール**する。
 
 ## 接続経路 (`ollama.home.arpa` と `ollama-traced.home.arpa`)
 
@@ -43,7 +43,7 @@ curl http://localhost:11434/v1/chat/completions \
   -d '{"model":"qwen3.5:9b","messages":[{"role":"user","content":"hi"}]}'
 
 # 5. 動作確認 — (b) LiteLLM 経由
-#    同じ応答が LiteLLM の `ollama/*` wildcard 経由でも返ることを確認
+#    同じ応答が LiteLLM 経由でも返ることを確認
 #    (LiteLLM コンテナが host.docker.internal:11434 に抜けられるかの検証も兼ねる)
 curl http://litellm.home.arpa/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -106,9 +106,11 @@ ollama pull llama3.3:70b
 
 ## LiteLLM の config.yaml に明示登録する (Open WebUI 用)
 
-`services/litellm/config.yaml` には `ollama/*` の wildcard ルートが入っており、curl や agent-demo のように**モデル名を直接指定して呼ぶ**クライアントならこれだけで動く。
+`services/litellm/config.yaml` には **pull したモデルを 1 件ずつ明示登録**する。
 
-一方 **Open WebUI / Dify のような「モデル一覧をドロップダウンに出す」クライアントは wildcard を展開できない**ため、UI から選ぶには **pull したモデルを 1 件ずつ明示登録**する必要がある。
+以前は `ollama/*` の wildcard ルートを置いていたが、**LiteLLM が実在しない `ollama/llama2` をモデル一覧に混ぜてしまう**ため外した。Open WebUI / Dify のように「モデル一覧をドロップダウンに出す」クライアントでは、選んでも失敗するモデルが並んでしまう。
+
+明示登録に一本化した代わりに、**モデルを pull したら config への追記と LiteLLM の再起動が必要**になる。登録せずに任意のタグを叩きたい場合は、Ollama ネイティブ API (`ollama.home.arpa`) を直接使う。
 
 `services/litellm/config.yaml` の `model_list:` に追記:
 
@@ -119,9 +121,9 @@ ollama pull llama3.3:70b
       model: ollama_chat/qwen3.5:9b
       api_base: os.environ/OLLAMA_BASE_URL
 
-  - model_name: ollama/llama3.3:70b
+  - model_name: ollama/gemma4:31b
     litellm_params:
-      model: ollama_chat/llama3.3:70b
+      model: ollama_chat/gemma4:31b
       api_base: os.environ/OLLAMA_BASE_URL
 ```
 
@@ -131,4 +133,4 @@ ollama pull llama3.3:70b
 mise run down:litellm && mise run up:litellm
 ```
 
-これで Open WebUI のモデル選択メニューに `ollama/qwen3.5:9b` 等が並ぶ。wildcard ルートは残したままで良い (明示エントリが優先的にマッチし、未登録タグは wildcard で拾われる)。
+これで Open WebUI のモデル選択メニューに `ollama/qwen3.5:9b` 等が並ぶ。**登録していないタグは LiteLLM 経由では呼べない** ので、pull したら忘れずに追記する。

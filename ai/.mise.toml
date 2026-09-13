@@ -1,5 +1,5 @@
 [tools]
-jq = "1.8.1"
+jq = "1.8.2"
 
 [env]
 _.file = ".env"

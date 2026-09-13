@@ -10,21 +10,9 @@ model_list:
       think: false
       keep_alive: "24h"
 
-  - model_name: "ollama/qwen3.6:35b-a3b-q8_0"
-    litellm_params:
-      model: "ollama_chat/qwen3.6:35b-a3b-q8_0"
-      api_base: os.environ/OLLAMA_BASE_URL
-      think: false
-      keep_alive: "24h"
   - model_name: "ollama/qwen3.6:35b-a3b"
     litellm_params:
       model: "ollama_chat/qwen3.6:35b-a3b"
-      api_base: os.environ/OLLAMA_BASE_URL
-      think: false
-      keep_alive: "24h"
-  - model_name: "ollama/qwen3.6:27b"
-    litellm_params:
-      model: "ollama_chat/qwen3.6:27b"
       api_base: os.environ/OLLAMA_BASE_URL
       think: false
       keep_alive: "24h"
@@ -46,21 +34,29 @@ model_list:
     litellm_params:
       model: "ollama_chat/gemma4:31b"
       api_base: os.environ/OLLAMA_BASE_URL
+      think: false
       keep_alive: "24h"
   - model_name: "ollama/gemma4:e4b"
     litellm_params:
       model: "ollama_chat/gemma4:e4b"
       api_base: os.environ/OLLAMA_BASE_URL
-      keep_alive: "24h"
-
-  # wildcard で pull 済みの任意モデルを `ollama/<tag>` として呼び出せる
-  # 例: `ollama/qwen3.5:9b`, `ollama/llama3.3:70b`
-  - model_name: "ollama/*"
-    litellm_params:
-      model: "ollama_chat/*"
-      api_base: os.environ/OLLAMA_BASE_URL
       think: false
       keep_alive: "24h"
+
+  # 疎通確認用の極小モデル。capabilities は completion のみで tools / vision は
+  # 持たないため、エージェント用途には使えない
+  - model_name: "ollama/gemma3:270m"
+    litellm_params:
+      model: "ollama_chat/gemma3:270m"
+      api_base: os.environ/OLLAMA_BASE_URL
+      keep_alive: "24h"
+
+  # wildcard (`ollama/*`) は置かない。置くと LiteLLM が実在しない
+  # `ollama/llama2` をモデル一覧に混ぜてしまい、Open WebUI のドロップダウンに
+  # 選んでも失敗するモデルが並ぶため。pull 済みモデルはここに明示登録する
+  # (追加したら `mise run down:litellm && mise run up:litellm`)。
+  # なお `x/z-image-turbo` のような画像生成モデルは chat completions の形に
+  # 乗らないので登録しない。Ollama ネイティブ API に直接投げること
 
   # OpenAI
   - model_name: gpt-5.5

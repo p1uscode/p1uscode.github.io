@@ -1,5 +1,5 @@
 [tools]
-node = "24.14.1"
+node = "26.8.2"
 
 [env]
 _.file = ".env"
