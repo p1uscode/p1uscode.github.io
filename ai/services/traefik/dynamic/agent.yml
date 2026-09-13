@@ -1,16 +1,17 @@
 http:
   routers:
-    # /api だけ HTTP 側(:8099)へ。ルール長で ws より優先されるので priority は不要。
-    # watch の設定 API (/api/device/<hwid>) がここを通る。
+    # 機器用入口は端末設定の取得・更新と利用量表示だけを HTTP 側へ通す。
+    # 管理 API は agent-ui.home.arpa 側に限定する。
     agent-api:
-      rule: "Host(`agent.home.arpa`) && PathPrefix(`/api`)"
+      rule: "Host(`agent.home.arpa`) && ((PathRegexp(`^/api/device/[0-9a-f]{4,32}$`) && (Method(`GET`) || Method(`PATCH`))) || (Path(`/api/usage`) && Method(`GET`)))"
       entryPoints:
         - web
       service: agent-http
 
-    # 残りは WebSocket(:8098)。ロボットの常時接続。
+    # 機器の常時接続はルートの WebSocket Upgrade だけを許可する。
+    # その他の URL はルーターに一致せず Traefik が 404 を返す。
     agent-ws:
-      rule: "Host(`agent.home.arpa`)"
+      rule: "Host(`agent.home.arpa`) && Path(`/`) && Method(`GET`) && HeaderRegexp(`Upgrade`, `(?i)^websocket$`)"
       entryPoints:
         - web
       service: agent-ws
