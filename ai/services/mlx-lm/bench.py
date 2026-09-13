@@ -51,7 +51,9 @@ def run_ollama(model: str, prompt: str, max_tokens: int, num_ctx: int, nonce: st
     t0 = time.perf_counter()
     ttft = None
     final = None
-    with urllib.request.urlopen(req) as res:
+    # timeout 無しだと Ollama が無応答のときにベンチが黙ってハングする。
+    # プロンプト評価が長いモデルもあるので長めに取る
+    with urllib.request.urlopen(req, timeout=1800) as res:
         for line in res:
             if not line.strip():
                 continue
@@ -61,6 +63,11 @@ def run_ollama(model: str, prompt: str, max_tokens: int, num_ctx: int, nonce: st
             if chunk.get("done"):
                 final = chunk
     wall = time.perf_counter() - t0
+
+    # done を受け取る前にストリームが切れると final が None のままになる。
+    # 直後の final[...] で TypeError になって原因が見えなくなるため明示的に落とす
+    if final is None:
+        raise RuntimeError("Ollama のストリームが done を返さずに終了した")
 
     return {
         "prompt_tokens": final["prompt_eval_count"],

@@ -22,10 +22,21 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
+        set -e
+        pids=""
         for p in 8097 8098 8099 8100 8765 9000 11434; do
           socat TCP-LISTEN:$$p,fork,reuseaddr TCP:host.docker.internal:$$p &
+          pids="$$pids $$!"
         done
-        wait
+        # 1 本でも死んだらコンテナごと落とす。そのまま生き残ると「一部の中継
+        # だけ欠けた状態」で動き続け、該当ホストだけ 502 になって気づきにくい。
+        # restart: always があるので落とせば作り直される
+        while :; do
+          for pid in $$pids; do
+            kill -0 $$pid 2>/dev/null || { echo "relay pid $$pid died; exiting" >&2; exit 1; }
+          done
+          sleep 5
+        done
 networks:
   proxy:
     external: true
