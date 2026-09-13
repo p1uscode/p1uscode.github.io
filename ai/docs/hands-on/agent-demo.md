@@ -198,7 +198,7 @@ AGENT_TOOLS=search,now mise run agent-single -- "今の時間を調べて、そ�
 
 ### 7. モデルを変えてみる (ローカル ↔ クラウド)
 
-デフォルトはローカル Ollama (`ollama/qwen3.5:9b`) で、LiteLLM の `ollama/*` wildcard 経由で `host.docker.internal:11434` に抜けている。`AGENT_MODEL` で任意のモデルに切り替えられる:
+デフォルトはローカル Ollama (`ollama/qwen3.5:9b`) で、LiteLLM 経由で `host.docker.internal:11434` に抜けている。`AGENT_MODEL` で **LiteLLM に登録済みの**モデルに切り替えられる:
 
 ```sh
 # ローカルの別サイズ (事前に ollama pull が必要)
