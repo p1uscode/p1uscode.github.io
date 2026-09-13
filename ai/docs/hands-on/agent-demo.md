@@ -202,7 +202,7 @@ AGENT_TOOLS=search,now mise run agent-single -- "今の時間を調べて、そ�
 
 ```sh
 # ローカルの別サイズ (事前に ollama pull が必要)
-AGENT_MODEL=ollama/qwen3.5:35b mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
+AGENT_MODEL=ollama/qwen3.6:35b-a3b mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"
 
 # クラウドの Gemini
 AGENT_MODEL=gemini-3.1-flash-preview mise run agent-single -- "今の時間を調べて、その分に 15 をかけて"

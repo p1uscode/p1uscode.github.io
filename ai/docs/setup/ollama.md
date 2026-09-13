@@ -119,9 +119,9 @@ ollama pull llama3.3:70b
       model: ollama_chat/qwen3.5:9b
       api_base: os.environ/OLLAMA_BASE_URL
 
-  - model_name: ollama/llama3.3:70b
+  - model_name: ollama/gemma4:31b
     litellm_params:
-      model: ollama_chat/llama3.3:70b
+      model: ollama_chat/gemma4:31b
       api_base: os.environ/OLLAMA_BASE_URL
 ```
 
