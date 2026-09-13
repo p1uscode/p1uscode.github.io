@@ -1,0 +1,8 @@
+<clickhouse>
+    <!-- homelab 用の省メモリ設定。ClickHouse はデフォルトだとホスト RAM に対して
+         富豪的にキャッシュを確保する (mark 5GiB / uncompressed 8GiB, サーバ上限は
+         ホスト RAM×0.9) ため、小規模トレース用途に合わせて明示的に絞る。 -->
+    <max_server_memory_usage>1610612736</max_server_memory_usage>      <!-- 1.5 GiB 上限 -->
+    <mark_cache_size>536870912</mark_cache_size>                       <!-- 512 MiB (default 5 GiB) -->
+    <uncompressed_cache_size>268435456</uncompressed_cache_size>       <!-- 256 MiB (default 8 GiB) -->
+</clickhouse>

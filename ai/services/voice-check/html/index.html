@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Check — VOICEVOX / Whisper</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: system-ui, sans-serif; max-width: 820px; margin: 24px auto; padding: 0 16px; line-height: 1.6; }
+  h1 { font-size: 1.4rem; }
+  .grid { display: grid; gap: 20px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .grid { grid-template-columns: 1fr 1fr; } }
+  section { border: 1px solid #8888; border-radius: 10px; padding: 16px; }
+  h2 { font-size: 1.1rem; margin-top: 0; }
+  textarea, select, input { width: 100%; box-sizing: border-box; font: inherit; padding: 6px; }
+  textarea { height: 90px; }
+  button { font: inherit; padding: 8px 16px; border-radius: 8px; border: 1px solid #8888; cursor: pointer; margin-top: 8px; }
+  button:disabled { opacity: .5; cursor: default; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .status { font-size: .85rem; color: #888; min-height: 1.2em; margin-top: 8px; white-space: pre-wrap; }
+  .result { margin-top: 8px; padding: 8px; border: 1px dashed #8888; border-radius: 8px; min-height: 2.4em; }
+  audio { width: 100%; margin-top: 8px; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+<h1>🔊 Voice Check</h1>
+<p>VOICEVOX (TTS) と Whisper (STT) の疎通確認用。API は同一オリジン経由でプロキシしています。</p>
+
+<div class="grid">
+  <!-- ─────────── TTS ─────────── -->
+  <section>
+    <h2>VOICEVOX — 音声合成 (TTS)</h2>
+    <label>話者
+      <select id="speaker"></select>
+    </label>
+    <label style="margin-top:8px; display:block;">テキスト
+      <textarea id="text">こんにちは、スタックチャンです。今日はいい天気ですね。</textarea>
+    </label>
+    <div class="row">
+      <button id="synth">合成して再生 ▶</button>
+    </div>
+    <audio id="audio" controls></audio>
+    <div class="row" id="ttsOut" style="display:none;">
+      <button id="replay">▶ 再生</button>
+      <button id="toStt">→ Whisperで認識</button>
+      <a id="dl" download>⬇ ダウンロード (wav)</a>
+    </div>
+    <div class="status" id="ttsStatus"></div>
+  </section>
+
+  <!-- ─────────── STT ─────────── -->
+  <section>
+    <h2>Whisper — 音声認識 (STT)</h2>
+    <label>音声ファイル (wav / mp3 / m4a / webm …)
+      <input type="file" id="file" accept="audio/*">
+    </label>
+    <div class="row">
+      <button id="recBtn">● 録音開始</button>
+      <span class="status" id="recStatus" style="margin:0;"></span>
+    </div>
+    <button id="stt">この音声を認識 →</button>
+    <div class="result" id="sttResult">—</div>
+    <div class="status" id="sttStatus"></div>
+  </section>
+</div>
+
+<p style="font-size:.85rem; color:#888;">
+  Whisper 単体UI: <a href="/whisper/" target="_blank">/whisper/</a> ・
+  VOICEVOX Swagger: <a href="/voicevox/docs" target="_blank">/voicevox/docs</a>
+</p>
+
+<script>
+const $ = id => document.getElementById(id);
+let lastBlob = null;   // STT 対象の音声 (録音 or 合成結果)
+
+// 話者一覧をロード
+(async () => {
+  try {
+    const speakers = await fetch('/voicevox/speakers').then(r => r.json());
+    const sel = $('speaker');
+    for (const sp of speakers)
+      for (const st of sp.styles) {
+        const o = document.createElement('option');
+        o.value = st.id;
+        o.textContent = `${sp.name} / ${st.name} (${st.id})`;
+        if (st.id === 3) o.selected = true;   // ずんだもん ノーマル
+        sel.appendChild(o);
+      }
+  } catch (e) { $('ttsStatus').textContent = '話者一覧の取得に失敗: ' + e; }
+})();
+
+// TTS
+// 自動再生はブラウザ制限で失敗しうる (await を跨ぐと Safari 等が握り潰す)。
+// そこで Web Audio でまず自動再生を試み、ダメでもネイティブ <audio> コントロールと
+// 「▶再生」ボタン (どちらも純粋なユーザー操作) で確実に鳴らせるようにする。
+let actx = null;
+let lastUrl = null;    // 直近合成の blob URL (再生 / ダウンロード用)
+let ttsBlob = null;    // 直近合成の音声 (Whisper へ直接渡す用)
+
+async function webAudioPlay(buf) {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') await actx.resume();
+    const decoded = await actx.decodeAudioData(buf.slice(0));
+    const node = actx.createBufferSource();
+    node.buffer = decoded;
+    node.connect(actx.destination);
+    node.start();
+    return '';
+  } catch (e) { return String(e.message || e); }
+}
+
+$('replay').onclick = () => { const a = $('audio'); a.currentTime = 0; a.play().catch(() => {}); };
+
+$('synth').onclick = async () => {
+  const text = $('text').value.trim();
+  const speaker = $('speaker').value;
+  if (!text) return;
+  $('synth').disabled = true;
+  $('ttsStatus').textContent = '合成中…';
+  const t0 = performance.now();
+  try {
+    const q = await fetch(`/voicevox/audio_query?text=${encodeURIComponent(text)}&speaker=${speaker}`,
+      { method: 'POST' }).then(r => r.json());
+    const res = await fetch(`/voicevox/synthesis?speaker=${speaker}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(q) });
+    if (!res.ok) throw new Error(`synthesis ${res.status}`);
+    const buf = await res.arrayBuffer();
+    const ms = Math.round(performance.now() - t0);
+    const blob = new Blob([buf], { type: 'audio/wav' });
+    ttsBlob = blob;
+    if (lastUrl) URL.revokeObjectURL(lastUrl);
+    lastUrl = URL.createObjectURL(blob);
+    // ネイティブプレイヤー + ダウンロードリンク
+    $('audio').src = lastUrl;
+    $('dl').href = lastUrl;
+    $('dl').download = (text.slice(0, 20).replace(/[\s\/\\:*?"<>|]/g, '_') || 'voicevox') + '.wav';
+    $('ttsOut').style.display = 'flex';
+    // 自動再生を試みる
+    const err = await webAudioPlay(buf);
+    $('ttsStatus').textContent = `完了 ${ms}ms / ${(blob.size / 1024).toFixed(0)}KB`
+      + (err ? `（自動再生不可: ${err} → ▶再生かプレイヤーで）` : '');
+  } catch (e) { $('ttsStatus').textContent = 'エラー: ' + e; }
+  $('synth').disabled = false;
+};
+
+// 合成した音声をダウンロードせずそのまま Whisper へ渡す
+$('toStt').onclick = () => {
+  if (!ttsBlob) return;
+  lastBlob = new File([ttsBlob], 'tts.wav', { type: 'audio/wav' });
+  $('sttStatus').textContent = '合成音声を認識中…';
+  doStt();
+  $('sttResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+// ファイル選択で STT 対象を更新
+$('file').onchange = () => { if ($('file').files[0]) lastBlob = $('file').files[0]; };
+
+// STT 実行
+async function doStt() {
+  if (!lastBlob) { $('sttStatus').textContent = '音声ファイルを選ぶか録音してください'; return; }
+  $('stt').disabled = true;
+  $('sttStatus').textContent = '認識中…';
+  const t0 = performance.now();
+  try {
+    const fd = new FormData();
+    fd.append('file', lastBlob, lastBlob.name || 'audio.webm');
+    fd.append('response_format', 'json');
+    fd.append('temperature', '0');
+    const r = await fetch('/whisper/inference', { method: 'POST', body: fd }).then(r => r.json());
+    const ms = Math.round(performance.now() - t0);
+    $('sttResult').textContent = (r.text || '(空)').trim();
+    $('sttStatus').textContent = `完了 ${ms}ms`;
+  } catch (e) { $('sttStatus').textContent = 'エラー: ' + e; }
+  $('stt').disabled = false;
+}
+$('stt').onclick = doStt;
+
+// 録音 (getUserMedia は localhost か https でのみ動作。別PCから http の場合はファイル選択を使う)
+let mediaRec = null, chunks = [];
+$('recBtn').onclick = async () => {
+  if (mediaRec && mediaRec.state === 'recording') { mediaRec.stop(); return; }
+  if (!navigator.mediaDevices?.getUserMedia) {
+    $('recStatus').textContent = 'このブラウザ/接続では録音不可 (http の別PCはファイル選択を)';
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRec = new MediaRecorder(stream);
+    chunks = [];
+    mediaRec.ondataavailable = e => chunks.push(e.data);
+    mediaRec.onstop = () => {
+      lastBlob = new File(chunks, 'rec.webm', { type: chunks[0]?.type || 'audio/webm' });
+      $('recStatus').textContent = `録音完了 ${(lastBlob.size/1024).toFixed(0)}KB`;
+      $('recBtn').textContent = '● 録音開始';
+      stream.getTracks().forEach(t => t.stop());
+    };
+    mediaRec.start();
+    $('recBtn').textContent = '■ 停止';
+    $('recStatus').textContent = '録音中…';
+  } catch (e) { $('recStatus').textContent = '録音エラー: ' + e; }
+};
+</script>
+</body>
+</html>

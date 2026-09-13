@@ -21,6 +21,11 @@ services:
       CLICKHOUSE_USER: clickhouse
       CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD}
       CLICKHOUSE_CLUSTER_ENABLED: "false"
+      # v3 → v4 移行。旧 SDK (LiteLLM 同梱の langfuse 2.x) からの取り込みを
+      # 維持するため dual-write。cutover 時は .env 側を events_only にする
+      LANGFUSE_MIGRATION_V4_WRITE_MODE: ${LANGFUSE_MIGRATION_V4_WRITE_MODE}
+      LANGFUSE_MIGRATION_V4_NATIVE_OTEL_BEHAVIOUR: ${LANGFUSE_MIGRATION_V4_NATIVE_OTEL_BEHAVIOUR}
+      LANGFUSE_BACKGROUND_MIGRATION_V4_ENABLE_HISTORIC_BACKFILL: ${LANGFUSE_BACKGROUND_MIGRATION_V4_ENABLE_HISTORIC_BACKFILL}
       LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
       LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
       LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
@@ -71,13 +76,19 @@ services:
     image: docker.io/clickhouse/clickhouse-server:${CLICKHOUSE_VERSION}
     restart: always
     user: "101:101"
+    # cgroup ハードキャップ。config.d の max_server_memory_usage(1.5GiB)より
+    # 余裕を持たせ、超過時の OOM kill を避ける。
+    mem_limit: 2g
     environment:
       CLICKHOUSE_DB: default
       CLICKHOUSE_USER: clickhouse
       CLICKHOUSE_PASSWORD: ${LANGFUSE_CLICKHOUSE_PASSWORD}
+      # jemalloc が解放済みメモリを OS に即返すようにして resident を下げる。
+      MALLOC_CONF: dirty_decay_ms:0,muzzy_decay_ms:0
     volumes:
       - langfuse_clickhouse_data:/var/lib/clickhouse
       - langfuse_clickhouse_logs:/var/log/clickhouse-server
+      - ./clickhouse/config.d:/etc/clickhouse-server/config.d:ro
     healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1
       interval: 5s

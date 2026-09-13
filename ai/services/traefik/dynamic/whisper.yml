@@ -1,0 +1,16 @@
+http:
+  routers:
+    whisper:
+      rule: "Host(`whisper.home.arpa`)"
+      entryPoints:
+        - web
+      service: whisper
+
+  services:
+    whisper:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          # ホスト側の whisper.cpp server (whisper-server) へ抜ける。
+          # Metal GPU はコンテナから見えないため Ollama と同じくホスト常駐。
+          - url: "http://host-relay:9000"

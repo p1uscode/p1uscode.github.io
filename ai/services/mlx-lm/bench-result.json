@@ -1,0 +1,36 @@
+{
+  "ollama/decode": {
+    "prompt_tokens": 37,
+    "prompt_tps": 58.09275214413283,
+    "gen_tokens": 256,
+    "gen_tps": 29.340285261783038,
+    "ttft": 0.7725985000142828,
+    "wall": 9.393347500008531
+  },
+  "ollama/prefill": {
+    "prompt_tokens": 4188,
+    "prompt_tps": 96.71277025251118,
+    "gen_tokens": 64,
+    "gen_tps": 25.59059972311379,
+    "ttft": 43.509284583007684,
+    "wall": 45.83741254202323
+  },
+  "mlx/decode": {
+    "prompt_tokens": 37,
+    "prompt_tps": 50.35289835509614,
+    "gen_tokens": 256,
+    "gen_tps": 15.695613495989596,
+    "ttft": 0.8339664170052856,
+    "wall": 17.161236083018593,
+    "peak_gb": 15.455039432
+  },
+  "mlx/prefill": {
+    "prompt_tokens": 4188,
+    "prompt_tps": 104.4477516087157,
+    "gen_tokens": 64,
+    "gen_tps": 15.387471406672985,
+    "ttft": 40.19488699999056,
+    "wall": 44.389406166999834,
+    "peak_gb": 18.548112438
+  }
+}

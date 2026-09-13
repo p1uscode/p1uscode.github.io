@@ -7,21 +7,34 @@ services:
     env_file:
       - ../../.env
     environment:
-      # Ollama は LiteLLM 経由で `ollama/*` として叩くので直接統合は無効化
-      - ENABLE_OLLAMA_API=false
+      # Ollama 直接統合 (OLLAMA_BASE_URL=host.docker.internal:11434 は .env から)。
+      # LiteLLM 経由の `ollama/*` と併用するのでモデルは両系統で二重に並ぶ。
+      # 直は Langfuse に痕跡が残らない代わりに think/keep_alive 等の native
+      # パラメータをそのまま渡せる
+      - ENABLE_OLLAMA_API=true
 
       # OpenAI compatible API (LiteLLM)
       - ENABLE_OPENAI_API=true
+      # LiteLLM は master key 未設定なので proxy 認証はかからない。ここで
+      # ダミーに上書きしないと .env の本家 OpenAI キーがそのまま Authorization
+      # ヘッダとして LiteLLM (と mitmproxy のログ) に流れる
+      - OPENAI_API_KEY=dummy
 
       # Auth
       - WEBUI_AUTH=false
       - ENABLE_SIGNUP=false
+      # WEBUI_AUTH=false でも新しいブラウザから開くたびに自動サインインで
+      # ユーザが作られる。既定の `pending` だと /api/models が 401 になり
+      # 「モデルが出ない」状態になるため admin を既定にする
+      - DEFAULT_USER_ROLE=admin
 
       # 環境変数をUIの設定より常に優先する
       - ENABLE_PERSISTENT_CONFIG=false
 
-      # デフォルトモデルパラメータ（thinking off / streaming on）
-      - DEFAULT_MODEL_PARAMS={"thinking":false,"stream_response":true}
+      # デフォルトモデルパラメータ（think off / モデル常駐 24h / streaming on）
+      # Ollama の root パラメータ名は `think` と `keep_alive`。`thinking` という
+      # キーは Open WebUI 側のマッピングに無く黙って捨てられるので注意
+      - DEFAULT_MODEL_PARAMS={"think":false,"keep_alive":"24h","stream_response":true}
 
       # 自動サブリクエスト（タイトル/タグ/フォローアップ/補完/検索クエリ生成）を無効化
       - ENABLE_TITLE_GENERATION=false

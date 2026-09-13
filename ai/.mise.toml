@@ -29,6 +29,10 @@ run = "docker network create proxy 2>/dev/null || true"
 description = "Start traefik"
 run = "docker compose -f services/traefik/docker-compose.yml up -d"
 
+[tasks."up:host-relay"]
+description = "Start host-relay (Traefik → ホスト常駐サービスの TCP 中継)"
+run = "docker compose -f services/host-relay/docker-compose.yml up -d"
+
 [tasks."up:dify"]
 description = "Start dify"
 run = """
@@ -66,18 +70,26 @@ run = "docker compose -f services/n8n/docker-compose.yml up -d"
 description = "Start homepage (service dashboard)"
 run = "docker compose -f services/homepage/docker-compose.yml up -d"
 
+[tasks."up:voicevox"]
+description = "Start voicevox (TTS engine)"
+run = "docker compose -f services/voicevox/docker-compose.yml up -d"
+
+[tasks."up:voice-check"]
+description = "Start voice-check (VOICEVOX/Whisper 疎通確認 UI)"
+run = "docker compose -f services/voice-check/docker-compose.yml up -d"
+
 [tasks.up]
-description = "Start all services"
+description = "Start core services (dify / langfuse / n8n は含めない。必要な時に up:dify / up:langfuse / up:n8n で個別起動)"
 depends = [
   "up:traefik",
-  "up:dify",
+  "up:host-relay",
   "up:litellm",
   "up:open-webui",
-  "up:langfuse",
   "up:searxng",
   "up:qdrant",
-  "up:n8n",
   "up:homepage",
+  "up:voicevox",
+  "up:voice-check",
 ]
 
 # ── down ──────────────────────────────────────────────────────────
@@ -85,6 +97,10 @@ depends = [
 [tasks."down:traefik"]
 description = "Stop traefik"
 run = "docker compose -f services/traefik/docker-compose.yml down"
+
+[tasks."down:host-relay"]
+description = "Stop host-relay"
+run = "docker compose -f services/host-relay/docker-compose.yml down"
 
 [tasks."down:dify"]
 description = "Stop dify"
@@ -123,10 +139,19 @@ run = "docker compose -f services/n8n/docker-compose.yml down"
 description = "Stop homepage"
 run = "docker compose -f services/homepage/docker-compose.yml down"
 
+[tasks."down:voicevox"]
+description = "Stop voicevox"
+run = "docker compose -f services/voicevox/docker-compose.yml down"
+
+[tasks."down:voice-check"]
+description = "Stop voice-check"
+run = "docker compose -f services/voice-check/docker-compose.yml down"
+
 [tasks.down]
 description = "Stop all services"
 depends = [
   "down:traefik",
+  "down:host-relay",
   "down:dify",
   "down:litellm",
   "down:open-webui",
@@ -135,6 +160,8 @@ depends = [
   "down:qdrant",
   "down:n8n",
   "down:homepage",
+  "down:voicevox",
+  "down:voice-check",
 ]
 
 # ── update ────────────────────────────────────────────────────────
@@ -162,7 +189,56 @@ docker compose -f services/searxng/docker-compose.yml pull
 docker compose -f services/qdrant/docker-compose.yml pull
 docker compose -f services/n8n/docker-compose.yml pull
 docker compose -f services/homepage/docker-compose.yml pull
+docker compose -f services/voicevox/docker-compose.yml pull
+docker compose -f services/voice-check/docker-compose.yml pull
 """
+
+# ── whisper (host / STT) ──────────────────────────────────────────
+# Ollama と同じく Metal GPU を使うためコンテナ化せずホストに常駐させる。
+# brew install whisper-cpp ffmpeg が前提 (詳細は docs/setup/whisper.md)。
+
+[tasks."whisper:model"]
+description = "Download whisper ggml models (small + large-v3-turbo-q5_0)"
+run = """
+#!/usr/bin/env bash
+set -e
+MD=services/whisper/models
+mkdir -p "$MD"
+base=https://huggingface.co/ggerganov/whisper.cpp/resolve/main
+for m in ggml-small.bin ggml-large-v3-turbo-q5_0.bin; do
+  if [ -f "$MD/$m" ]; then echo "$m: already present"; else
+    echo "downloading $m ..."; curl -fL -o "$MD/$m" "$base/$m"; fi
+done
+ls -lh "$MD"
+"""
+
+[tasks."whisper:serve"]
+description = "Run whisper.cpp server on host (0.0.0.0:${WHISPER_PORT}, Metal). Exposed via whisper.home.arpa"
+run = "whisper-server -m ${WHISPER_MODEL} --host 0.0.0.0 --port ${WHISPER_PORT} -l ${WHISPER_LANG} --convert"
+
+# ── mlx-lm (host / LLM) ───────────────────────────────────────────
+# Ollama と同じく Metal GPU を直接使うためホスト実行。Ollama との
+# スループット比較用 (詳細は docs/setup/mlx-lm.md)。
+
+[tasks."mlx:model"]
+description = "Download the MLX model weights from Hugging Face (~15GB)"
+dir = "services/mlx-lm"
+run = """
+uv run --quiet python -c "
+from huggingface_hub import snapshot_download
+print(snapshot_download('${MLX_MODEL}', max_workers=8))
+"
+"""
+
+[tasks."mlx:bench"]
+description = "Benchmark ollama vs mlx-lm on the same model (prefill / decode tok/s)"
+dir = "services/mlx-lm"
+run = "uv run --quiet python bench.py --ollama-model ${MLX_OLLAMA_MODEL} --mlx-model ${MLX_MODEL}"
+
+[tasks."mlx:serve"]
+description = "Run the mlx-lm OpenAI-compatible server on host (0.0.0.0:${MLX_PORT})"
+dir = "services/mlx-lm"
+run = "uv run --quiet mlx_lm.server --model ${MLX_MODEL} --host 0.0.0.0 --port ${MLX_PORT}"
 
 # ── agent-demo ────────────────────────────────────────────────────
 

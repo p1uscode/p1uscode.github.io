@@ -10,6 +10,9 @@ services:
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--providers.file.watch=true"
       - "--entrypoints.web.address=:80"
+      # クライアントが送る X-Forwarded-For / -Proto を信頼して上流へ転送する
+      # (ホスト常駐サービスが実クライアントIPをログに出せるように)
+      - "--entrypoints.web.forwardedHeaders.insecure=true"
       - "--api.dashboard=true"
       - "--api.insecure=true"
     ports:

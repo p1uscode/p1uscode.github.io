@@ -1,0 +1,42 @@
+# Traefik からホスト常駐サービス (Ollama / Whisper / agent 等) への中継。
+#
+# Traefik が host.docker.internal へ直接転送すると、上流が無通信のまま
+# 約168秒経過した時点で接続が切られ 504 Gateway Timeout になる (実測)。
+# Ollama の vision 推論はプロンプト評価中に 1 バイトも返さないため、
+# 大きな画像を渡すと確実にこれを踏む。
+#
+# 一方、Traefik → コンテナ間と、コンテナ → ホスト間はいずれも
+# 900 秒の無通信でも切れないことを実測済み。両者の間に素の TCP 中継を
+# 挟むことで、Traefik が host.docker.internal を直接見る構図をなくす。
+services:
+  host-relay:
+    image: alpine/socat:${SOCAT_VERSION}
+    restart: always
+    networks:
+      - proxy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # 中継するポートは services/traefik/dynamic/*.yml が向いている先と対応:
+    #   8097 agent-mcp / 8098 agent-ws / 8099 agent-http / 8100 agent-webhook
+    #   8765 line-stamp / 9000 whisper / 11434 ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        set -e
+        pids=""
+        for p in 8097 8098 8099 8100 8765 9000 11434; do
+          socat TCP-LISTEN:$$p,fork,reuseaddr TCP:host.docker.internal:$$p &
+          pids="$$pids $$!"
+        done
+        # 1 本でも死んだらコンテナごと落とす。そのまま生き残ると「一部の中継
+        # だけ欠けた状態」で動き続け、該当ホストだけ 502 になって気づきにくい。
+        # restart: always があるので落とせば作り直される
+        while :; do
+          for pid in $$pids; do
+            kill -0 $$pid 2>/dev/null || { echo "relay pid $$pid died; exiting" >&2; exit 1; }
+          done
+          sleep 5
+        done
+networks:
+  proxy:
+    external: true

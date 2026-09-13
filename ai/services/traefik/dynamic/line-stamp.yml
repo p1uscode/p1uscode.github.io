@@ -1,0 +1,17 @@
+http:
+  routers:
+    line-stamp:
+      rule: "Host(`line-stamp.home.arpa`)"
+      entryPoints:
+        - web
+      service: line-stamp
+
+  services:
+    line-stamp:
+      loadBalancer:
+        passHostHeader: false
+        servers:
+          # ホスト常駐の LINEスタンプ管理画面 (feedback_server.py, :8765) へ抜ける。
+          # feedback_server は STAMP_UI_HOST=0.0.0.0 で待ち受ける必要がある
+          # (127.0.0.1 固定だとコンテナから届かない)。open_review.sh が 0.0.0.0 で起動する。
+          - url: "http://host-relay:8765"

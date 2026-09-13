@@ -1,0 +1,7 @@
+<clickhouse>
+    <!-- ClickHouse 26.x は既定で 127.0.0.1 / ::1 にしか bind しないため、同じ
+         compose ネットワーク上の langfuse-web / langfuse-worker から 8123 (HTTP)
+         と 9000 (native) に届かない。コンテナはポートを外部公開しておらず
+         docker network 内からのみ到達可能なので 0.0.0.0 で待ち受ける。 -->
+    <listen_host>0.0.0.0</listen_host>
+</clickhouse>

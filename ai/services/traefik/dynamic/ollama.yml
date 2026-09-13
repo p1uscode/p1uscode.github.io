@@ -4,11 +4,25 @@ http:
       rule: "Host(`ollama.home.arpa`)"
       entryPoints:
         - web
+      middlewares:
+        - ollama-host
       service: ollama
+
+  middlewares:
+    # Ollama は Host ヘッダを検査し、既知でないホスト名は 403 で弾く。
+    # 上流が host-relay になったことで `host-relay:11434` が送られ 403 に
+    # なるため、Ollama が受け付けるホスト名に付け替える
+    ollama-host:
+      headers:
+        customRequestHeaders:
+          Host: "localhost:11434"
 
   services:
     ollama:
       loadBalancer:
-        passHostHeader: false
+        # passHostHeader: false にすると Traefik がミドルウェアの後段で Host を
+        # 上流 URL のホスト名 (host-relay:11434) に上書きしてしまい 403 に戻る。
+        # true にして ollama-host ミドルウェアが設定した Host を通す
+        passHostHeader: true
         servers:
-          - url: "http://host.docker.internal:11434"
+          - url: "http://host-relay:11434"
