@@ -29,3 +29,5 @@
 | 3 | [mise の使い方](mise.md) | タスクランナー + 環境変数ローダーとしての mise |
 | 4 | [DNS 設定](dns.md) | `*.home.arpa` の名前解決 (`/etc/hosts` / dnsmasq) |
 | 5 | [Ollama (ホスト側導入)](ollama.md) | ローカル LLM ランタイム (クラウド LLM のみ使うなら不要) |
+| 6 | [Whisper (STT)](whisper.md) | 音声認識。Ollama と同じくホスト常駐 (音声を扱わないなら不要) |
+| 7 | [VoiceVox (TTS)](voicevox.md) | 音声合成。コンテナで動く (音声を扱わないなら不要) |

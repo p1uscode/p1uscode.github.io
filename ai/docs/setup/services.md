@@ -12,12 +12,17 @@
 │   ├── dify/
 │   │   ├── docker-compose.override.yaml  # difyのローカルカスタマイズ
 │   │   └── dify/                         # git clone (管理外)
+│   ├── host-relay/                       # Traefik → ホスト常駐サービスの TCP 中継
 │   ├── litellm/                          # LiteLLM プロキシ + mitmproxy
 │   ├── open-webui/                       # Open WebUI
 │   ├── langfuse/                         # Langfuse (LLM オブザーバビリティ)
 │   ├── searxng/                          # SearXNG (メタ検索エンジン)
 │   ├── qdrant/                           # Qdrant (ベクトル DB)
-│   └── n8n/                              # n8n (ワークフロー自動化)
+│   ├── n8n/                              # n8n (ワークフロー自動化)
+│   ├── voicevox/                         # VOICEVOX (TTS)
+│   ├── voice-check/                      # TTS/STT 疎通確認用の簡易 UI
+│   ├── whisper/                          # Whisper (STT) のモデル置き場 (本体はホスト常駐)
+│   └── mlx-lm/                           # mlx-lm ベンチ (Ollama との比較用、ホスト実行)
 ├── examples/                             # 学習用サンプルコード
 │   └── agent-demo/                       # LangChain ツールコールエージェント (Node/TS)
 └── docs/                                 # ドキュメント群 (setup / hands-on / theory)
@@ -40,6 +45,10 @@
 | SearXNG | <http://searxng.home.arpa> | 70+ エンジン (Google/Brave/DuckDuckGo/Wikipedia 等) を束ねるメタ検索。JSON API を有効化して agent-demo の検索ツールが叩く。 |
 | Qdrant | <http://qdrant.home.arpa> | スタンドアロンのベクトル DB。Dify の内蔵ストアと切り離して RAG の retrieval 段を手で組む学習用。 |
 | n8n | <http://n8n.home.arpa> | ビジュアルワークフロー自動化。LangChain ベースの AI Agent ノードを持つ。初回アクセス時にオーナーアカウント作成。 |
+| VOICEVOX | <http://voicevox.home.arpa> | 音声合成 (TTS)。話者・話速・辞書を REST API で扱える。詳細は [VoiceVox (TTS)](voicevox.md)。 |
+| Whisper | <http://whisper.home.arpa> | 音声認識 (STT)。Metal GPU を使うため Ollama と同じくホスト常駐。詳細は [Whisper (STT)](whisper.md)。 |
+| Voice Check | <http://voice-check.home.arpa> | VOICEVOX / Whisper の疎通をブラウザから確認する簡易 UI。別 PC から叩けるよう直公開している。 |
+| host-relay | (URL なし) | Traefik からホスト常駐サービス (Ollama / Whisper 等) への TCP 中継。Traefik が `host.docker.internal` を直接見ると無通信 168 秒で接続を切られ 504 になるため、間に挟んでいる。 |
 
 ## 利用可能モデル (LiteLLM 経由)
 
